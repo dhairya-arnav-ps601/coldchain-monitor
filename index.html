@@ -3,332 +3,882 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ColdChain Monitor — Refrigerated Freight Telemetry & Spoilage Alerts</title>
+  <title>ColdChain Monitor V2.0 — Enterprise Refrigerated Freight Telemetry</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Bootstrap 5 CSS CDN -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Bootstrap Icons CDN -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <!-- Custom Stylesheet -->
+  <!-- Custom Design System Stylesheet -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- ========================================== -->
-  <!-- 1. AUTHENTICATION / LOGIN VIEW             -->
-  <!-- ========================================== -->
-  <section id="loginSection" class="login-container">
-    <div class="card login-card p-4 shadow-lg border-0">
-      <div class="text-center mb-4">
-        <div class="d-inline-flex p-3 rounded-circle bg-primary bg-opacity-10 text-primary mb-2">
-          <i class="bi bi-snow2 fs-1"></i>
+  <!-- =================================================================== -->
+  <!-- 1. AUTHENTICATION / SPLIT-SCREEN ENTERPRISE LOGIN VIEW              -->
+  <!-- =================================================================== -->
+  <section id="loginSection" class="login-split-wrapper">
+    <!-- Left Brand Identity Panel -->
+    <div class="login-brand-side">
+      <div>
+        <div class="d-flex align-items-center gap-2 mb-4">
+          <div class="sidebar-brand-icon">
+            <i class="bi bi-snow2"></i>
+          </div>
+          <div>
+            <span class="fs-4 fw-bold text-white tracking-tight">ColdChain<span class="text-info">.io</span></span>
+            <span class="sidebar-badge-v2 ms-2">V2.0 ENTERPRISE</span>
+          </div>
         </div>
-        <h3 class="fw-bold text-dark mb-1">ColdChain Monitor</h3>
-        <p class="text-muted small mb-0">Refrigerated Freight IoT Telemetry & Spoilage Alert System</p>
+
+        <div class="mt-5 pt-3" style="max-width: 540px;">
+          <span class="badge bg-primary bg-opacity-25 text-info border border-info border-opacity-25 px-3 py-1 rounded-pill small mb-3">
+            <i class="bi bi-shield-check me-1"></i> GxP &amp; FDA 21 CFR Part 11 Compliant Architecture
+          </span>
+          <h1 class="display-6 fw-bold text-white mb-3">
+            Intelligent cold-chain telemetry &amp; automated excursion governance.
+          </h1>
+          <p class="text-white-50 fs-6 mb-4">
+            Unified logistics oversight for temperature-sensitive pharmaceuticals, biologics, vaccines, and perishables. Real-time excursion classification, dual-role approvals, and IoT telemetry integrity.
+          </p>
+
+          <!-- Metrics preview card -->
+          <div class="row g-3 mt-2">
+            <div class="col-4">
+              <div class="p-3 rounded-3 bg-white bg-opacity-10 border border-white border-opacity-10">
+                <div class="text-info fw-bold fs-4">99.8%</div>
+                <div class="small text-white-50" style="font-size: 0.72rem;">Thermal Compliance</div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="p-3 rounded-3 bg-white bg-opacity-10 border border-white border-opacity-10">
+                <div class="text-success fw-bold fs-4">&lt; 30s</div>
+                <div class="small text-white-50" style="font-size: 0.72rem;">Alert Dispatch</div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="p-3 rounded-3 bg-white bg-opacity-10 border border-white border-opacity-10">
+                <div class="text-warning fw-bold fs-4">0%</div>
+                <div class="small text-white-50" style="font-size: 0.72rem;">Spoilage Loss</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Private Login Form with Validation -->
-      <form id="loginForm" novalidate>
-        <div class="mb-3">
-          <label for="loginUsername" class="form-label small fw-semibold">Username / ID</label>
-          <div class="input-group">
-            <span class="input-group-text bg-light"><i class="bi bi-person"></i></span>
-            <input type="text" id="loginUsername" class="form-control" placeholder="Enter username" required autocomplete="username">
+      <div class="pt-4 border-top border-white border-opacity-10 d-flex justify-content-between align-items-center small text-white-50">
+        <div>Polaris School of Technology &bull; OJT Capstone</div>
+        <div>Mentored under <strong>Kshitij Sir</strong></div>
+      </div>
+    </div>
+
+    <!-- Right Login Card Panel -->
+    <div class="login-form-side">
+      <div class="login-card-v2">
+        <div class="mb-4">
+          <h4 class="fw-bold text-dark mb-1">Sign in to console</h4>
+          <p class="text-muted small mb-0">Enter your operational credentials to access your terminal.</p>
+        </div>
+
+        <!-- Quick Demo Account Fillers -->
+        <div class="mb-4 p-3 bg-light rounded-3 border">
+          <div class="small fw-semibold text-secondary mb-2 d-flex align-items-center justify-content-between">
+            <span><i class="bi bi-lightning-charge-fill text-warning me-1"></i>One-Click Demo Roles:</span>
+            <span class="text-muted" style="font-size: 0.7rem;">Password: 123</span>
           </div>
-          <div class="invalid-feedback">Please enter your username.</div>
-        </div>
-
-        <div class="mb-3">
-          <label for="loginPassword" class="form-label small fw-semibold">Password</label>
-          <div class="input-group">
-            <span class="input-group-text bg-light"><i class="bi bi-lock"></i></span>
-            <input type="password" id="loginPassword" class="form-control" placeholder="••••" required autocomplete="current-password">
+          <div class="d-flex gap-2 flex-wrap">
+            <button type="button" class="quick-cred-chip text-primary fw-semibold" id="fillManagerCreds">
+              <i class="bi bi-person-badge me-1"></i> Arnav (Logistics Manager)
+            </button>
+            <button type="button" class="quick-cred-chip text-teal fw-semibold" id="fillOperatorCreds">
+              <i class="bi bi-box-seam me-1"></i> Sourabh (Warehouse Operator)
+            </button>
           </div>
-          <div class="invalid-feedback">Password is required.</div>
         </div>
 
-        <div id="loginError" class="alert alert-danger py-2 small d-none" role="alert">
-          <i class="bi bi-exclamation-triangle-fill me-1"></i> Invalid username or password. Please try again.
-        </div>
+        <!-- Login Form -->
+        <form id="loginForm" novalidate>
+          <div class="mb-3">
+            <label for="loginUsername" class="form-label small fw-semibold text-dark">User ID / Username</label>
+            <div class="input-group">
+              <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-person"></i></span>
+              <input type="text" id="loginUsername" class="form-control border-start-0 ps-0" placeholder="e.g. Arnav or Sourabh" required autocomplete="username">
+            </div>
+          </div>
 
-        <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold" id="loginSubmit">
-          <i class="bi bi-box-arrow-in-right me-1"></i> Sign In to Monitor
-        </button>
-      </form>
+          <div class="mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <label for="loginPassword" class="form-label small fw-semibold text-dark mb-0">Password</label>
+              <button type="button" class="btn btn-sm btn-link p-0 text-decoration-none small text-muted" id="togglePassword">
+                <i class="bi bi-eye me-1" id="togglePasswordIcon"></i><span id="togglePasswordText">Show</span>
+              </button>
+            </div>
+            <div class="input-group">
+              <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-lock"></i></span>
+              <input type="password" id="loginPassword" class="form-control border-start-0 ps-0" placeholder="••••••••" required autocomplete="current-password">
+            </div>
+          </div>
+
+          <div id="loginError" class="alert alert-danger py-2 small d-none" role="alert">
+            <i class="bi bi-exclamation-octagon-fill me-1"></i> Invalid User ID or Password. Please try again.
+          </div>
+
+          <button type="submit" class="btn btn-crm-primary w-100 py-2 justify-content-center fw-semibold mt-2" id="loginSubmit">
+            <i class="bi bi-box-arrow-in-right me-1"></i> Authenticate &amp; Launch Console
+          </button>
+        </form>
+
+        <div class="mt-4 pt-3 text-center border-top small text-muted">
+          Need assistance or role re-assignment? Contact dispatch at <strong>arnavpratap60@gmail.com</strong>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- ========================================== -->
-  <!-- 2. MAIN APPLICATION DASHBOARD              -->
-  <!-- ========================================== -->
-  <div id="appSection" class="d-none">
+  <!-- =================================================================== -->
+  <!-- 2. ENTERPRISE APPLICATION SHELL (SIDEBAR + WORKSPACE)               -->
+  <!-- =================================================================== -->
+  <div id="appSection" class="app-shell d-none">
 
-    <!-- Global Top Navigation -->
-    <header class="navbar navbar-expand-lg navbar-dark bg-navy px-3 py-2 sticky-top shadow-sm">
-      <div class="container-fluid flex-wrap gap-2">
-        <!-- Brand with crisp white subtext -->
-        <a class="navbar-brand fw-bold mb-0 d-flex align-items-center gap-2" href="#">
-          <i class="bi bi-snow text-cyan fs-3"></i>
+    <!-- Mobile Drawer Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+
+    <!-- Deep Navy Left Sidebar -->
+    <aside class="app-sidebar" id="appSidebar">
+      <!-- Sidebar Brand Header -->
+      <div class="sidebar-header">
+        <a href="#" class="sidebar-brand">
+          <div class="sidebar-brand-icon">
+            <i class="bi bi-snow2"></i>
+          </div>
           <div>
-            <span class="d-block leading-tight text-white">ColdChain Monitor</span>
-            <span class="brand-sub d-none d-sm-block text-white" style="font-size: 0.68rem; letter-spacing: 0.05em; color: #ffffff !important;">
-              IoT TELEMETRY &amp; SPOILAGE PREVENTION
-            </span>
+            <div class="sidebar-brand-text">ColdChain<span class="text-info">.io</span></div>
+            <div class="small text-white-50" style="font-size: 0.65rem; letter-spacing: 0.04em;">MONITOR V2.0</div>
           </div>
         </a>
+        <button class="btn btn-sm btn-link text-white-50 d-lg-none p-0" id="closeSidebarBtn">
+          <i class="bi bi-x-lg fs-5"></i>
+        </button>
+      </div>
 
-        <!-- Main Navigation Tabs -->
-        <ul class="navbar-nav me-auto d-flex flex-row flex-wrap gap-1" id="mainNavBar">
-          <li class="nav-item">
-            <button class="nav-link btn btn-link text-white active px-2 py-1 rounded" id="navDashboard" type="button">
-              <i class="bi bi-speedometer2 me-1"></i> Dashboard
-            </button>
-          </li>
-          <li class="nav-item">
-            <button class="nav-link btn btn-link text-white px-2 py-1 rounded" id="navAlerts" type="button">
-              <i class="bi bi-shield-exclamation me-1"></i> Incident Alerts
-              <span class="badge bg-danger rounded-pill ms-1" id="navAlertsBadge">0</span>
-            </button>
-          </li>
-          <!-- Cancel Requests tab: Only shown for Warehouse Operator -->
-          <li class="nav-item" id="navCancelItem">
-            <button class="nav-link btn btn-link text-white px-2 py-1 rounded" id="navCancellations" type="button">
-              <i class="bi bi-x-octagon me-1"></i> Cancel Requests
-              <span class="badge bg-warning text-dark rounded-pill ms-1" id="navCancelBadge">0</span>
-            </button>
-          </li>
-          <li class="nav-item">
-            <button class="nav-link btn btn-link text-white px-2 py-1 rounded" id="navDelivered" type="button">
-              <i class="bi bi-box-seam me-1"></i> Delivered
-              <span class="badge bg-success rounded-pill ms-1" id="navDeliveredBadge">0</span>
-            </button>
-          </li>
-          <li class="nav-item">
-            <button class="nav-link btn btn-link text-white px-2 py-1 rounded" id="navCancelled" type="button">
-              <i class="bi bi-slash-circle me-1"></i> Cancelled
-              <span class="badge bg-secondary rounded-pill ms-1" id="navCancelledBadge">0</span>
-            </button>
-          </li>
-        </ul>
+      <!-- Navigation Links Container -->
+      <div class="sidebar-nav-container">
+        <!-- Section: Fleet Operations -->
+        <div class="sidebar-nav-section-title">Fleet Operations</div>
+        <button class="sidebar-nav-btn active" id="navDashboard" type="button">
+          <span><i class="bi bi-speedometer2 nav-icon"></i>Overview</span>
+        </button>
+        <button class="sidebar-nav-btn" id="navShipments" type="button">
+          <span><i class="bi bi-truck nav-icon"></i>Active Shipments</span>
+          <span class="badge bg-primary bg-opacity-25 text-info rounded-pill" id="sidebarShipmentsBadge">0</span>
+        </button>
+        <button class="sidebar-nav-btn" id="navAlerts" type="button">
+          <span><i class="bi bi-shield-exclamation nav-icon text-danger"></i>Alert Center</span>
+          <span class="badge bg-danger rounded-pill" id="navAlertsBadge">0</span>
+        </button>
+        <!-- Cancellations Queue: Highlighted especially for Warehouse Operator -->
+        <button class="sidebar-nav-btn" id="navCancellations" type="button">
+          <span><i class="bi bi-x-octagon nav-icon text-warning"></i>Approvals Queue</span>
+          <span class="badge bg-warning text-dark rounded-pill" id="navCancelBadge">0</span>
+        </button>
+        <button class="sidebar-nav-btn" id="navDelivered" type="button">
+          <span><i class="bi bi-box-seam nav-icon text-success"></i>Delivered History</span>
+          <span class="badge bg-white bg-opacity-10 text-white rounded-pill" id="navDeliveredBadge">0</span>
+        </button>
+        <button class="sidebar-nav-btn" id="navCancelled" type="button">
+          <span><i class="bi bi-slash-circle nav-icon text-secondary"></i>Cancelled Records</span>
+          <span class="badge bg-white bg-opacity-10 text-white rounded-pill" id="navCancelledBadge">0</span>
+        </button>
 
-        <!-- Right User Actions: Clickable User Profile Chip & Logout -->
-        <div class="d-flex align-items-center gap-2">
-          <!-- Click name/chip to view logged-in user's profile ONLY -->
-          <div class="user-chip d-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-white bg-opacity-10 border border-light border-opacity-25 text-white" 
-               id="userProfileChip" role="button" tabindex="0" title="Click to view your profile">
-            <i class="bi bi-person-circle text-cyan fs-5"></i>
-            <div class="text-start" style="line-height: 1.15;">
-              <span class="small fw-bold d-block" id="navUserName">User</span>
-              <span class="badge bg-light text-dark font-monospace" id="userRoleBadge" style="font-size: 0.65rem;">Role</span>
+        <!-- Section: Intelligence & Hardware -->
+        <div class="sidebar-nav-section-title mt-3">Hardware &amp; Analytics</div>
+        <button class="sidebar-nav-btn" id="navDevices" type="button">
+          <span><i class="bi bi-broadcast-pin nav-icon"></i>IoT Device Fleet</span>
+          <span class="badge bg-success bg-opacity-25 text-success rounded-pill">8 Online</span>
+        </button>
+        <button class="sidebar-nav-btn" id="navReports" type="button">
+          <span><i class="bi bi-graph-up-arrow nav-icon"></i>Analytics &amp; Reports</span>
+        </button>
+
+        <!-- Section: System -->
+        <div class="sidebar-nav-section-title mt-3">Governance</div>
+        <button class="sidebar-nav-btn" id="navSettings" type="button">
+          <span><i class="bi bi-gear nav-icon"></i>Settings &amp; Profile</span>
+        </button>
+      </div>
+
+      <!-- Sidebar User Footer -->
+      <div class="sidebar-footer">
+        <div class="user-profile-widget" id="userProfileChip" title="Click to view detailed profile metadata">
+          <div class="d-flex align-items-center gap-2 overflow-hidden">
+            <div class="user-avatar-circle" id="sidebarAvatarInitial">A</div>
+            <div class="overflow-hidden">
+              <div class="fw-bold text-white text-truncate small" id="navUserName">Arnav</div>
+              <div class="text-white-50 text-truncate" style="font-size: 0.68rem;" id="userRoleBadge">Logistics Manager</div>
             </div>
           </div>
-
-          <!-- Logout Button -->
-          <button class="btn btn-danger btn-sm" id="btnLogout" title="Sign Out" type="button">
-            <i class="bi bi-power"></i>
+          <button class="btn btn-sm btn-link text-white-50 p-1" id="btnLogout" title="Sign Out">
+            <i class="bi bi-box-arrow-right fs-6"></i>
           </button>
         </div>
       </div>
-    </header>
+    </aside>
 
-    <!-- Main Container -->
-    <main class="container py-3">
+    <!-- Main Workspace -->
+    <div class="app-main">
 
-      <!-- ================= VIEW 1: ACTIVE DASHBOARD ================= -->
-      <div id="viewDashboard">
-
-        <!-- Area for Operator Cancellation Decisions Sent to Logistics Manager -->
-        <div id="managerNotificationsContainer"></div>
-
-        <!-- KPI Summary Cards -->
-        <section class="row g-2 mb-3" aria-label="Fleet Overview KPIs">
-          <div class="col-6 col-md-3">
-            <div class="card p-2 text-center kpi-card border-primary">
-              <small class="text-muted text-uppercase fw-semibold" style="font-size: 0.72rem;">Active Shipments</small>
-              <h4 class="mb-0 fw-bold text-primary" id="statTotal">0</h4>
-            </div>
-          </div>
-          <div class="col-6 col-md-3">
-            <div class="card p-2 text-center kpi-card border-success">
-              <small class="text-muted text-uppercase fw-semibold" style="font-size: 0.72rem;">Normal Range</small>
-              <h4 class="mb-0 fw-bold text-success" id="statNormal">0</h4>
-            </div>
-          </div>
-          <div class="col-6 col-md-3">
-            <div class="card p-2 text-center kpi-card border-warning">
-              <small class="text-muted text-uppercase fw-semibold" style="font-size: 0.72rem;">Warning Alerts</small>
-              <h4 class="mb-0 fw-bold text-warning" id="statWarning">0</h4>
-            </div>
-          </div>
-          <div class="col-6 col-md-3">
-            <div class="card p-2 text-center kpi-card border-danger cursor-pointer" id="kpiCriticalCard" role="button" tabindex="0" title="Click to view Critical Alerts">
-              <small class="text-muted text-uppercase fw-semibold" style="font-size: 0.72rem;">Critical Excursions</small>
-              <h4 class="mb-0 fw-bold text-danger" id="statCritical">0</h4>
-            </div>
-          </div>
-        </section>
-
-        <!-- Search, Filter & Actions Bar -->
-        <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-3">
-          <div class="d-flex gap-2 flex-grow-1" style="max-width: 480px;">
-            <label for="searchInput" class="visually-hidden">Search active shipments</label>
-            <div class="input-group input-group-sm">
-              <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
-              <input type="text" id="searchInput" class="form-control" placeholder="Search ID, Cargo, Route...">
-            </div>
-
-            <label for="statusFilter" class="visually-hidden">Filter by condition</label>
-            <select id="statusFilter" class="form-select form-select-sm w-auto">
-              <option value="ALL">All Condition</option>
-              <option value="Normal">Normal</option>
-              <option value="Warning">Warning</option>
-              <option value="Critical">Critical</option>
-            </select>
-          </div>
-
-          <!-- Controls: IoT Ping & Register Shipment -->
-          <div class="d-flex gap-2 align-items-center">
-            <button class="btn btn-sm btn-primary" id="btnSimulatePing" type="button" title="Simulate telemetry readings">
-              <i class="bi bi-broadcast me-1"></i> Check Current Status
-            </button>
-            <button class="btn btn-sm btn-success" id="btnOpenAddShipment" type="button">
-              <i class="bi bi-plus-circle me-1"></i> Register Shipment
-            </button>
+      <!-- Top Header Navigation Bar -->
+      <header class="app-topbar">
+        <div class="d-flex align-items-center gap-3">
+          <button class="mobile-sidebar-toggle" id="openSidebarBtn" aria-label="Toggle Navigation">
+            <i class="bi bi-list"></i>
+          </button>
+          <div>
+            <h5 class="fw-bold mb-0 text-dark" id="topbarViewTitle">Overview</h5>
+            <small class="text-muted d-none d-sm-block" id="topbarBreadcrumb">Operations &bull; Real-time Fleet Telemetry</small>
           </div>
         </div>
 
-        <!-- Active Refrigerated Freight Listing Table -->
-        <div class="card border-0 shadow-sm mb-4">
-          <div class="card-header bg-white fw-bold d-flex justify-content-between align-items-center">
-            <span><i class="bi bi-truck text-primary me-2"></i>Active Refrigerated Freight</span>
-            <small class="text-muted">In-Transit IoT Monitored</small>
+        <div class="d-flex align-items-center gap-2">
+          <!-- Truthful Telemetry Indicator Badge (Mandated by Playbook) -->
+          <div class="simulation-indicator-badge d-none d-md-inline-flex" title="Telemetry data is generated via calibrated realistic IoT simulation engine">
+            <div class="status-dot-pulse"></div>
+            <span>Simulated IoT Telemetry</span>
+            <span class="text-muted fw-normal">| Fresh</span>
           </div>
-          <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-              <thead class="table-light">
-                <tr>
-                  <th>Shipment ID</th>
-                  <th>Cargo</th>
-                  <th>Route</th>
-                  <th>Safe Limits</th>
-                  <th>Latest Temp</th>
-                  <th>Condition</th>
-                  <th class="text-end">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="shipmentTableBody"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
 
-      <!-- ================= VIEW 2: INCIDENT & TELEMETRY ALERTS ================= -->
-      <div id="viewAlerts" class="d-none">
-        <div class="card border-0 shadow-sm mb-4">
-          <div class="card-header bg-white fw-bold d-flex flex-wrap gap-2 justify-content-between align-items-center">
-            <div class="d-flex align-items-center gap-2">
-              <i class="bi bi-shield-exclamation text-danger fs-5"></i>
-              <span>Incident &amp; Spoilage Alerts</span>
-              <span class="badge bg-danger ms-1" id="unresolvedBadge">0 Active</span>
-            </div>
-            <!-- Delete All Alerts button -->
-            <button class="btn btn-sm btn-outline-danger" id="btnDeleteAllAlerts" type="button">
-              <i class="bi bi-trash3 me-1"></i> Delete All Alerts
-            </button>
-          </div>
-          <div class="card-body p-3" id="alertsList"></div>
-        </div>
-      </div>
+          <!-- Quick Simulate Ping Action -->
+          <button class="btn btn-crm-outline btn-sm" id="btnSimulatePing" type="button" title="Simulate realistic sensor ping across active packages">
+            <i class="bi bi-broadcast text-primary"></i>
+            <span class="d-none d-md-inline">Ping IoT Fleet</span>
+          </button>
 
-      <!-- ================= VIEW 3: CANCELLATION REQUESTS (WAREHOUSE OPERATOR ONLY) ================= -->
-      <div id="viewCancellations" class="d-none">
-        <div class="card border-0 shadow-sm mb-4">
-          <div class="card-header bg-white fw-bold d-flex flex-wrap gap-2 justify-content-between align-items-center">
+          <!-- Register Shipment Action (Manager role prioritized) -->
+          <button class="btn btn-crm-primary btn-sm" id="btnOpenAddShipment" type="button">
+            <i class="bi bi-plus-lg"></i>
+            <span class="d-none d-md-inline">New Shipment</span>
+          </button>
+
+          <!-- Switch User Role Quick Button -->
+          <button class="btn btn-crm-outline btn-sm" id="btnQuickSwitchRole" type="button" title="Switch between Manager and Operator persona">
+            <i class="bi bi-arrow-left-right text-info"></i>
+            <span class="d-none d-lg-inline">Switch Role</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Workspace Content Views Area -->
+      <main class="workspace-content">
+
+        <!-- ============================================================= -->
+        <!-- VIEW 1: EXECUTIVE OVERVIEW DASHBOARD                          -->
+        <!-- ============================================================= -->
+        <div id="viewDashboard">
+
+          <!-- Operator Cancellation Decisions Banner (for Logistics Manager) -->
+          <div id="managerNotificationsContainer"></div>
+
+          <!-- Welcome & Operational Context Header -->
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
             <div>
-              <i class="bi bi-x-octagon text-warning me-1"></i>
-              <span>Shipment Cancellation Requests Queue</span>
-              <small class="text-muted ms-2">(Review &amp; Approve/Reject Manager Requests)</small>
+              <h4 class="fw-bold text-dark mb-1">
+                Good afternoon, <span id="welcomeUserName" class="text-primary">Arnav</span> 👋
+              </h4>
+              <p class="text-muted small mb-0">Here is your live cold-chain telemetry and excursion status across India hubs.</p>
             </div>
-            <span class="badge bg-secondary" id="pendingCancelBadge">0 Pending</span>
+            <div class="d-flex align-items-center gap-2">
+              <span class="badge bg-white text-secondary border px-3 py-2 small shadow-xs">
+                <i class="bi bi-calendar3 me-1 text-primary"></i> <span id="liveClockDate">23 Nov 2026</span>
+              </span>
+            </div>
           </div>
-          <div class="card-body p-3" id="cancellationsList"></div>
+
+          <!-- 5 Master KPI Summary Cards -->
+          <div class="row g-3 mb-4">
+            <div class="col-6 col-md-4 col-xl">
+              <div class="kpi-card-v2 kpi-primary">
+                <div class="d-flex justify-content-between align-items-start">
+                  <div class="kpi-title">Active Freight</div>
+                  <span class="kpi-badge-trend text-primary bg-primary bg-opacity-10"><i class="bi bi-truck"></i> Live</span>
+                </div>
+                <div class="kpi-value" id="statTotal">0</div>
+                <div class="small text-muted mt-2">Refrigerated units in transit</div>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-xl">
+              <div class="kpi-card-v2 kpi-success">
+                <div class="d-flex justify-content-between align-items-start">
+                  <div class="kpi-title">Compliant Range</div>
+                  <span class="kpi-badge-trend text-success bg-success bg-opacity-10"><i class="bi bi-shield-check"></i> Safe</span>
+                </div>
+                <div class="kpi-value text-success" id="statNormal">0</div>
+                <div class="small text-muted mt-2">Within configured bounds</div>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-xl">
+              <div class="kpi-card-v2 kpi-warning">
+                <div class="d-flex justify-content-between align-items-start">
+                  <div class="kpi-title">Warning Alerts</div>
+                  <span class="kpi-badge-trend text-warning bg-warning bg-opacity-10"><i class="bi bi-exclamation-triangle"></i> Drift</span>
+                </div>
+                <div class="kpi-value text-warning" id="statWarning">0</div>
+                <div class="small text-muted mt-2">&lt; 2.0°C excursion margin</div>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4 col-xl">
+              <div class="kpi-card-v2 kpi-critical cursor-pointer" id="kpiCriticalCard" role="button" tabindex="0" title="Click to filter Critical alerts">
+                <div class="d-flex justify-content-between align-items-start">
+                  <div class="kpi-title">Critical Breaches</div>
+                  <span class="kpi-badge-trend text-danger bg-danger bg-opacity-10"><i class="bi bi-x-octagon"></i> Breach</span>
+                </div>
+                <div class="kpi-value text-danger" id="statCritical">0</div>
+                <div class="small text-muted mt-2">&ge; 2.0°C thermal breach</div>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-4 col-xl">
+              <div class="kpi-card-v2 kpi-info">
+                <div class="d-flex justify-content-between align-items-start">
+                  <div class="kpi-title">IoT Gateways</div>
+                  <span class="kpi-badge-trend text-info bg-info bg-opacity-10"><i class="bi bi-wifi"></i> Online</span>
+                </div>
+                <div class="kpi-value text-info" id="statGateways">8 / 8</div>
+                <div class="small text-muted mt-2">100% gateway telemetry reach</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts Row: Temperature Compliance & Condition Breakdown -->
+          <div class="row g-3 mb-4">
+            <div class="col-12 col-lg-8">
+              <div class="crm-card h-100">
+                <div class="crm-card-header">
+                  <div>
+                    <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-activity text-primary me-2"></i>Active Freight Thermal Readings vs Limits</h6>
+                    <small class="text-muted">Current simulated sensor telemetry across all active packages</small>
+                  </div>
+                  <span class="badge bg-light text-dark border">Real-Time Sync</span>
+                </div>
+                <div class="crm-card-body" style="height: 280px; position: relative;">
+                  <canvas id="overviewComplianceChart"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-lg-4">
+              <div class="crm-card h-100">
+                <div class="crm-card-header">
+                  <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-pie-chart text-primary me-2"></i>Thermal Condition Share</h6>
+                  <small class="text-muted">Compliance ratio</small>
+                </div>
+                <div class="crm-card-body d-flex flex-column align-items-center justify-content-center" style="height: 280px; position: relative;">
+                  <canvas id="conditionDoughnutChart" style="max-height: 210px;"></canvas>
+                  <div class="small text-muted mt-2 text-center" id="conditionDoughnutSummary">Evaluating live distribution...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Freight Snapshot Table -->
+          <div class="crm-card mb-4">
+            <div class="crm-card-header">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-truck text-primary fs-5"></i>
+                <div>
+                  <h6 class="fw-bold mb-0 text-dark">Active Refrigerated Freight</h6>
+                  <small class="text-muted">Live sensor monitoring and operational quick actions</small>
+                </div>
+              </div>
+              <button class="btn btn-sm btn-crm-outline" id="btnQuickViewAllShipments">
+                View All Shipments <i class="bi bi-arrow-right ms-1"></i>
+              </button>
+            </div>
+            <div class="table-responsive">
+              <table class="crm-table">
+                <thead>
+                  <tr>
+                    <th>Shipment ID</th>
+                    <th>Cargo Type</th>
+                    <th>Route (Hub to Hub)</th>
+                    <th>Configured Limits</th>
+                    <th>Latest Telemetry</th>
+                    <th>Thermal Condition</th>
+                    <th class="text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="dashboardQuickTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+
         </div>
-      </div>
 
-      <!-- ================= VIEW 4: DELIVERED SHIPMENTS (ISOLATED) ================= -->
-      <div id="viewDelivered" class="d-none">
-        <div class="card border-0 shadow-sm mb-4">
-          <div class="card-header bg-white fw-bold d-flex flex-wrap gap-2 justify-content-between align-items-center">
-            <span><i class="bi bi-box-seam text-success me-1"></i> Delivered Shipments History</span>
-            <button class="btn btn-sm btn-outline-danger" id="btnDeleteDelivered" type="button">
-              <i class="bi bi-trash3 me-1"></i> Clear Delivered History
-            </button>
-          </div>
-          <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-              <thead class="table-light">
-                <tr>
-                  <th>Shipment ID</th>
-                  <th>Cargo</th>
-                  <th>Route</th>
-                  <th>Safe Limits</th>
-                  <th>Final Reading</th>
-                  <th>Delivered At</th>
-                  <th class="text-end">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="deliveredBody"></tbody>
-            </table>
+        <!-- ============================================================= -->
+        <!-- VIEW 2: COMPREHENSIVE SHIPMENT MANAGEMENT                     -->
+        <!-- ============================================================= -->
+        <div id="viewShipments" class="d-none">
+          <div class="crm-card mb-4">
+            <div class="crm-card-header flex-wrap gap-2">
+              <div>
+                <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-boxes text-primary me-2"></i>Fleet Shipment Directory</h6>
+                <small class="text-muted">Comprehensive inventory of refrigerated shipments in transit</small>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-crm-outline btn-sm" id="btnExportShipmentsCSV" title="Export current shipment list to CSV">
+                  <i class="bi bi-download me-1"></i> Export CSV
+                </button>
+                <button class="btn btn-crm-primary btn-sm" id="btnOpenAddShipmentFromList">
+                  <i class="bi bi-plus-lg me-1"></i> Register Shipment
+                </button>
+              </div>
+            </div>
+
+            <!-- Advanced Filter & Search Bar -->
+            <div class="p-3 bg-light border-bottom d-flex flex-wrap gap-2 justify-content-between align-items-center">
+              <div class="d-flex gap-2 flex-grow-1" style="max-width: 520px;">
+                <div class="input-group input-group-sm">
+                  <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
+                  <input type="text" id="searchInput" class="form-control" placeholder="Search by ID, Cargo, Origin, or Destination...">
+                </div>
+                <select id="statusFilter" class="form-select form-select-sm w-auto">
+                  <option value="ALL">All Conditions</option>
+                  <option value="Normal">Normal Range</option>
+                  <option value="Warning">Warning Alerts</option>
+                  <option value="Critical">Critical Breaches</option>
+                </select>
+                <select id="cargoFilter" class="form-select form-select-sm w-auto d-none d-md-block">
+                  <option value="ALL">All Cargo Types</option>
+                  <option value="Vaccines">Vaccines &amp; Biologics</option>
+                  <option value="Produce">Produce &amp; Food</option>
+                  <option value="Dairy">Dairy &amp; Seafood</option>
+                </select>
+              </div>
+
+              <div class="d-flex align-items-center gap-2 small text-muted">
+                <span id="shipmentCountSummary">Showing 8 shipments</span>
+              </div>
+            </div>
+
+            <!-- Master Table -->
+            <div class="table-responsive">
+              <table class="crm-table">
+                <thead>
+                  <tr>
+                    <th>Shipment ID</th>
+                    <th>Cargo Type</th>
+                    <th>Route</th>
+                    <th>Safe Range</th>
+                    <th>Latest Temp</th>
+                    <th>Condition Status</th>
+                    <th class="text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="shipmentTableBody"></tbody>
+              </table>
+            </div>
+
+            <!-- Table Footer with Pagination info -->
+            <div class="p-3 border-top d-flex justify-content-between align-items-center small text-muted">
+              <div>Telemetry source: <strong>Simulated Calibrated Gateway Engine</strong></div>
+              <div id="shipmentPaginationInfo">Page 1 of 1</div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- ================= VIEW 5: CANCELLED SHIPMENTS (ISOLATED) ================= -->
-      <div id="viewCancelled" class="d-none">
-        <div class="card border-0 shadow-sm mb-4">
-          <div class="card-header bg-white fw-bold">
-            <i class="bi bi-slash-circle text-danger me-1"></i> Cancelled Shipments Record
-            <small class="text-muted fw-normal ms-2">(Packages cancelled upon Warehouse Operator approval)</small>
+        <!-- ============================================================= -->
+        <!-- VIEW 3: INCIDENT & ALERTS MANAGEMENT CENTER                   -->
+        <!-- ============================================================= -->
+        <div id="viewAlerts" class="d-none">
+          <!-- Alert Metrics Header -->
+          <div class="row g-3 mb-4">
+            <div class="col-6 col-md-3">
+              <div class="kpi-card-v2 kpi-critical">
+                <div class="kpi-title">Active Critical Incidents</div>
+                <div class="kpi-value text-danger" id="alertStatCritical">0</div>
+                <div class="small text-muted mt-1">Requires immediate regulation</div>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="kpi-card-v2 kpi-warning">
+                <div class="kpi-title">Warning Excursions</div>
+                <div class="kpi-value text-warning" id="alertStatWarning">0</div>
+                <div class="small text-muted mt-1">Nearing boundary limit</div>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="kpi-card-v2 kpi-primary">
+                <div class="kpi-title">Operator Requests</div>
+                <div class="kpi-value text-primary" id="alertStatRequests">0</div>
+                <div class="small text-muted mt-1">Dispatched to Manager</div>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="kpi-card-v2 kpi-success">
+                <div class="kpi-title">Resolved Historical</div>
+                <div class="kpi-value text-success" id="alertStatResolved">0</div>
+                <div class="small text-muted mt-1">Corrected &amp; regulated</div>
+              </div>
+            </div>
           </div>
-          <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-              <thead class="table-light">
-                <tr>
-                  <th>Shipment ID</th>
-                  <th>Cargo</th>
-                  <th>Route</th>
-                  <th>Reason for Cancellation</th>
-                  <th>Additional Remarks</th>
-                  <th>Requested By</th>
-                  <th>Approved By</th>
-                  <th>Cancelled At</th>
-                  <th class="text-end">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="cancelledBody"></tbody>
-            </table>
+
+          <!-- Alert Center Card with Severity Tabs -->
+          <div class="crm-card mb-4">
+            <div class="crm-card-header flex-wrap gap-2">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-shield-exclamation text-danger fs-5"></i>
+                <div>
+                  <h6 class="fw-bold mb-0 text-dark">Incident &amp; Spoilage Prevention Center</h6>
+                  <small class="text-muted">Real-time thermal breach logs, operator notices, and resolution workflows</small>
+                </div>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-crm-outline text-danger" id="btnDeleteAllAlerts" type="button">
+                  <i class="bi bi-trash3 me-1"></i> Clear All Alerts
+                </button>
+              </div>
+            </div>
+
+            <!-- Severity Filter Tabs -->
+            <div class="px-3 pt-2 bg-light border-bottom d-flex gap-2">
+              <button class="btn btn-sm btn-link text-decoration-none fw-semibold active text-primary border-bottom border-primary pb-2 rounded-0" id="filterAlertAll">All Alerts</button>
+              <button class="btn btn-sm btn-link text-decoration-none text-muted pb-2 rounded-0" id="filterAlertCritical">Critical Only</button>
+              <button class="btn btn-sm btn-link text-decoration-none text-muted pb-2 rounded-0" id="filterAlertWarning">Warnings Only</button>
+              <button class="btn btn-sm btn-link text-decoration-none text-muted pb-2 rounded-0" id="filterAlertCancellations">Cancellation Notices</button>
+              <button class="btn btn-sm btn-link text-decoration-none text-muted pb-2 rounded-0" id="filterAlertResolved">Resolved Archive</button>
+            </div>
+
+            <div class="crm-card-body p-3" id="alertsList"></div>
           </div>
         </div>
-      </div>
 
-    </main>
+        <!-- ============================================================= -->
+        <!-- VIEW 4: CANCELLATIONS & APPROVALS QUEUE (OPERATOR / MANAGER)  -->
+        <!-- ============================================================= -->
+        <div id="viewCancellations" class="d-none">
+          <div class="crm-card mb-4">
+            <div class="crm-card-header flex-wrap gap-2">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-check2-circle text-warning fs-5"></i>
+                <div>
+                  <h6 class="fw-bold mb-0 text-dark">Shipment Cancellation Approvals Queue</h6>
+                  <small class="text-muted">Manager-initiated requests reviewed, approved, or rejected by Warehouse Operators</small>
+                </div>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-warning text-dark px-3 py-2" id="pendingCancelBadge">0 Pending Decisions</span>
+              </div>
+            </div>
 
-    <!-- Footer -->
-    <footer class="py-3 px-4 text-center border-top bg-white mt-auto small text-muted">
-      ColdChain Monitor v0.1
-    </footer>
+            <!-- Explanatory Workflow Banner -->
+            <div class="p-3 bg-light border-bottom small text-muted d-flex align-items-center gap-3">
+              <i class="bi bi-info-circle-fill text-primary fs-5"></i>
+              <div>
+                <strong>Two-Person Governance Workflow:</strong> When Logistics Managers request cancellation due to thermal shock, container compromise, or route diversion, the Warehouse Operator at the receiving depot must inspect and verify the physical load before approving closure.
+              </div>
+            </div>
+
+            <div class="crm-card-body p-3" id="cancellationsList"></div>
+          </div>
+        </div>
+
+        <!-- ============================================================= -->
+        <!-- VIEW 5: DELIVERED SHIPMENTS HISTORY                           -->
+        <!-- ============================================================= -->
+        <div id="viewDelivered" class="d-none">
+          <div class="crm-card mb-4">
+            <div class="crm-card-header flex-wrap gap-2">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-box-seam text-success fs-5"></i>
+                <div>
+                  <h6 class="fw-bold mb-0 text-dark">Delivered Refrigerated Cargo Archive</h6>
+                  <small class="text-muted">Historical records of successfully delivered cold freight with compliance receipts</small>
+                </div>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-crm-outline" id="btnExportDeliveredCSV">
+                  <i class="bi bi-download me-1"></i> Export Delivered CSV
+                </button>
+                <button class="btn btn-sm btn-crm-outline text-danger" id="btnDeleteDelivered" type="button">
+                  <i class="bi bi-trash3 me-1"></i> Clear Delivered Archive
+                </button>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="crm-table">
+                <thead>
+                  <tr>
+                    <th>Shipment ID</th>
+                    <th>Cargo Type</th>
+                    <th>Route Completed</th>
+                    <th>Prescribed Limits</th>
+                    <th>Final Reading</th>
+                    <th>Delivery Timestamp</th>
+                    <th class="text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="deliveredBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================================= -->
+        <!-- VIEW 6: CANCELLED SHIPMENTS RECORD                            -->
+        <!-- ============================================================= -->
+        <div id="viewCancelled" class="d-none">
+          <div class="crm-card mb-4">
+            <div class="crm-card-header flex-wrap gap-2">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-slash-circle text-danger fs-5"></i>
+                <div>
+                  <h6 class="fw-bold mb-0 text-dark">Cancelled Shipments Audit Record</h6>
+                  <small class="text-muted">Formal audit trail of cancelled packages with justification and Operator approvals</small>
+                </div>
+              </div>
+              <button class="btn btn-sm btn-crm-outline" id="btnExportCancelledCSV">
+                <i class="bi bi-download me-1"></i> Export Cancelled CSV
+              </button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="crm-table">
+                <thead>
+                  <tr>
+                    <th>Shipment ID</th>
+                    <th>Cargo Type</th>
+                    <th>Route</th>
+                    <th>Cancellation Reason</th>
+                    <th>Inspection Remarks</th>
+                    <th>Requested By</th>
+                    <th>Approved By</th>
+                    <th>Decision Timestamp</th>
+                    <th class="text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="cancelledBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================================= -->
+        <!-- VIEW 7: IOT DEVICE FLEET (NEW V2.0 MODULE)                    -->
+        <!-- ============================================================= -->
+        <div id="viewDevices" class="d-none">
+          <div class="crm-card mb-4">
+            <div class="crm-card-header flex-wrap gap-2">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-broadcast-pin text-primary fs-5"></i>
+                <div>
+                  <h6 class="fw-bold mb-0 text-dark">IoT Telemetry Hardware Fleet</h6>
+                  <small class="text-muted">Sensor health, battery discharge, RF signal, and calibration telemetry</small>
+                </div>
+              </div>
+              <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-3 py-2">
+                <i class="bi bi-hdd-network me-1"></i> 8 Active Hardware Probes
+              </span>
+            </div>
+
+            <div class="p-3 bg-light border-bottom small text-muted">
+              <i class="bi bi-shield-check text-success me-1"></i> <strong>Telemetry Provenance:</strong> Hardware status generated via simulated calibrated sensor loggers adhering to ISO/IEC 17025 thermal measurement standards.
+            </div>
+
+            <div class="crm-card-body">
+              <div class="row g-3" id="deviceFleetGrid"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================================= -->
+        <!-- VIEW 8: ANALYTICS & COMPLIANCE REPORTS (NEW V2.0 MODULE)     -->
+        <!-- ============================================================= -->
+        <div id="viewReports" class="d-none">
+          <div class="crm-card mb-4">
+            <div class="crm-card-header flex-wrap gap-2">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-graph-up-arrow text-primary fs-5"></i>
+                <div>
+                  <h6 class="fw-bold mb-0 text-dark">Compliance Analytics &amp; Audit Reports</h6>
+                  <small class="text-muted">Fleet thermal stability metrics, breach frequencies, and exportable regulatory filings</small>
+                </div>
+              </div>
+              <button class="btn btn-sm btn-crm-primary" id="btnDownloadFullAudit">
+                <i class="bi bi-file-earmark-spreadsheet me-1"></i> Download Master Audit CSV
+              </button>
+            </div>
+
+            <div class="crm-card-body">
+              <div class="row g-4 mb-4">
+                <div class="col-12 col-md-4">
+                  <div class="p-3 border rounded-3 bg-light">
+                    <span class="text-muted small text-uppercase fw-semibold">Global Compliance Score</span>
+                    <h3 class="fw-bold text-success mt-2 mb-1" id="reportComplianceScore">96.4%</h3>
+                    <div class="small text-muted">Calculated against WHO Good Distribution Practice standards.</div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4">
+                  <div class="p-3 border rounded-3 bg-light">
+                    <span class="text-muted small text-uppercase fw-semibold">Mean Excursion Duration</span>
+                    <h3 class="fw-bold text-primary mt-2 mb-1">18.5 mins</h3>
+                    <div class="small text-muted">Average time between alert trip and regulation resolution.</div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4">
+                  <div class="p-3 border rounded-3 bg-light">
+                    <span class="text-muted small text-uppercase fw-semibold">Spoilage Incident Rate</span>
+                    <h3 class="fw-bold text-dark mt-2 mb-1">0.0%</h3>
+                    <div class="small text-muted">Zero spoiled consignments due to timely alert mitigation.</div>
+                  </div>
+                </div>
+              </div>
+
+              <h6 class="fw-bold text-dark mb-3">Excursion Breakdown by Commodity Class</h6>
+              <div class="table-responsive">
+                <table class="crm-table">
+                  <thead>
+                    <tr>
+                      <th>Cargo Category</th>
+                      <th>Total Consignments</th>
+                      <th>Target Safe Band</th>
+                      <th>Breach Risk Level</th>
+                      <th>Fleet Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>mRNA Vaccines &amp; Biologics</strong></td>
+                      <td>2 shipments</td>
+                      <td>-25.0°C to -15.0°C</td>
+                      <td><span class="badge bg-danger">High Thermal Sensitivity</span></td>
+                      <td><span class="status-pill status-pill-Normal">Compliant</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Insulin &amp; Blood Plasma</strong></td>
+                      <td>2 shipments</td>
+                      <td>+2.0°C to +8.0°C</td>
+                      <td><span class="badge bg-warning text-dark">Medium Sensitivity</span></td>
+                      <td><span class="status-pill status-pill-Warning">Warning Alert</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Dairy &amp; Chilled Poultry</strong></td>
+                      <td>2 shipments</td>
+                      <td>+0.0°C to +4.0°C</td>
+                      <td><span class="badge bg-info text-white">Standard Chill</span></td>
+                      <td><span class="status-pill status-pill-Normal">Compliant</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Fresh Produce &amp; Confectionery</strong></td>
+                      <td>2 shipments</td>
+                      <td>+2.0°C to +18.0°C</td>
+                      <td><span class="badge bg-secondary">Low Sensitivity</span></td>
+                      <td><span class="status-pill status-pill-Normal">Compliant</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================================= -->
+        <!-- VIEW 9: SETTINGS & USER PROFILE (NEW V2.0 MODULE)             -->
+        <!-- ============================================================= -->
+        <div id="viewSettings" class="d-none">
+          <div class="row g-4 mb-4">
+            <div class="col-12 col-lg-5">
+              <div class="crm-card">
+                <div class="crm-card-header">
+                  <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-person-circle text-primary me-2"></i>Active Operational Profile</h6>
+                  <span class="badge bg-success-subtle text-success">Verified Session</span>
+                </div>
+                <div class="crm-card-body">
+                  <div class="d-flex align-items-center gap-3 mb-4 pb-3 border-bottom">
+                    <div class="profile-modal-avatar">
+                      <i class="bi bi-person-fill"></i>
+                    </div>
+                    <div>
+                      <h5 class="fw-bold text-dark mb-1" id="settingsProfileName">Arnav</h5>
+                      <span class="badge bg-primary" id="settingsProfileRole">Logistics Manager</span>
+                      <div class="small text-muted mt-1">Polaris School of Technology Bangalore</div>
+                    </div>
+                  </div>
+
+                  <dl class="row small mb-0" id="settingsProfileDetails"></dl>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-lg-7">
+              <div class="crm-card mb-4">
+                <div class="crm-card-header">
+                  <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-sliders text-primary me-2"></i>Telemetry &amp; Governance Rules</h6>
+                </div>
+                <div class="crm-card-body">
+                  <div class="mb-3">
+                    <label class="form-label small fw-semibold text-dark">Excursion Threshold Sensitivity</label>
+                    <select class="form-select form-select-sm" disabled>
+                      <option selected>Strict (&lt; 2.0°C Warning, &ge; 2.0°C Critical Breach)</option>
+                    </select>
+                    <div class="form-text small">Aligned with WHO Technical Report Series, No. 961 guidelines.</div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label small fw-semibold text-dark">Telemetry Engine Calibration</label>
+                    <div class="p-3 bg-light rounded-3 border small text-muted">
+                      <div>Engine Mode: <strong>Deterministic + Stochastic Sensor Drift</strong></div>
+                      <div>Sampling Frequency: <strong>Manual Ping &amp; Live Inspection</strong></div>
+                      <div>Data Storage: <strong>Local &bull; Persistent Schema v5_cancellation_alerts</strong></div>
+                    </div>
+                  </div>
+
+                  <div class="d-flex justify-content-between align-items-center pt-2">
+                    <div>
+                      <div class="fw-semibold small text-dark">Fast Role Switcher</div>
+                      <div class="text-muted small">Switch between Logistics Manager and Warehouse Operator instantly.</div>
+                    </div>
+                    <button class="btn btn-sm btn-crm-outline" id="btnSettingsSwitchRole">
+                      <i class="bi bi-arrow-left-right me-1"></i> Switch User Role
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+
+      <!-- Global Enterprise Footer -->
+      <footer class="py-3 px-4 border-top bg-white small text-muted d-flex flex-wrap justify-content-between align-items-center">
+        <div>
+          <strong>ColdChain Monitor V2.0</strong> &bull; Applied AI OJT Capstone Project &bull; Polaris School of Technology Bangalore
+        </div>
+        <div class="text-muted">
+          Mentored by <strong>Kshitij Sir</strong> &bull; Engineered by <strong>Arnav Pratap Singh</strong>
+        </div>
+      </footer>
+    </div>
   </div>
 
-  <!-- ========================================== -->
-  <!-- 3. INTERACTIVE MODALS                      -->
-  <!-- ========================================== -->
+  <!-- =================================================================== -->
+  <!-- 3. INTERACTIVE MODALS & DIALOGS                                     -->
+  <!-- =================================================================== -->
 
-  <!-- MODAL: LOGGED-IN USER PROFILE ONLY -->
+  <!-- MODAL: DETAILED USER PROFILE -->
   <div class="modal fade" id="userProfileModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content border-0 shadow-lg">
         <div class="modal-header bg-navy text-white">
-          <h6 class="modal-title fw-bold"><i class="bi bi-person-badge me-2 text-cyan"></i>User Profile</h6>
+          <h6 class="modal-title fw-bold"><i class="bi bi-person-badge me-2 text-info"></i>Operator Identity Profile</h6>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body p-4">
@@ -339,63 +889,67 @@
             <div>
               <h5 class="mb-0 fw-bold" id="profModalName">Arnav</h5>
               <span class="badge bg-primary" id="profModalRole">Logistics Manager</span>
-              <span class="badge bg-success-subtle text-success ms-1">Active Session</span>
+              <span class="badge bg-success-subtle text-success ms-1">Active Terminal</span>
             </div>
           </div>
 
-          <h6 class="fw-bold small text-secondary text-uppercase mb-2">Core Responsibilities</h6>
+          <h6 class="fw-bold small text-secondary text-uppercase mb-2">Core Mandate</h6>
           <p class="small text-muted p-2 bg-light rounded-2 mb-3 fw-semibold" id="profModalDuty">OJT project under Kshitij sir</p>
 
           <h6 class="fw-bold small text-secondary text-uppercase mb-2">Operational Details</h6>
           <dl class="row small mb-0" id="profModalDetailsList"></dl>
         </div>
         <div class="modal-footer bg-light py-2">
-          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-crm-outline btn-sm" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: DELETE AUTHORIZATION REQUIRING USER ID & PASSWORD -->
-  <div class="modal fade" id="deleteAuthModal" tabindex="-1" aria-hidden="true">
+  <!-- MODAL: QUICK ROLE SWITCHER -->
+  <div class="modal fade" id="switchRoleModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content border-0 shadow">
-        <div class="modal-header bg-danger text-white">
-          <h6 class="modal-title fw-bold">
-            <i class="bi bi-shield-lock me-2"></i>Delete Authorization Required
-          </h6>
+      <div class="modal-content border-0 shadow-lg">
+        <div class="modal-header bg-navy text-white">
+          <h6 class="modal-title fw-bold"><i class="bi bi-arrow-left-right me-2 text-info"></i>Select Active Persona</h6>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form id="deleteAuthForm">
-          <div class="modal-body p-4">
-            <p class="small text-muted mb-3">
-              Security verification: To permanently delete <strong id="deleteTargetShipmentId" class="text-danger">---</strong>, please confirm your credentials.
-            </p>
-            <div id="deleteAuthError" class="alert alert-danger py-2 small d-none" role="alert">
-              <i class="bi bi-exclamation-triangle-fill me-1"></i> Invalid User ID or Password. Deletion denied.
-            </div>
-            <div class="mb-3">
-              <label for="deleteAuthUserId" class="form-label small fw-semibold">User ID</label>
-              <div class="input-group input-group-sm">
-                <span class="input-group-text"><i class="bi bi-person"></i></span>
-                <input type="text" id="deleteAuthUserId" class="form-control" placeholder="Enter your User ID (e.g. Arnav)" required autocomplete="username">
+        <div class="modal-body p-4">
+          <p class="small text-muted mb-3">Switch between operational profiles to verify role-based permissions and approval flows:</p>
+          
+          <div class="d-flex flex-column gap-3">
+            <div class="p-3 border rounded-3 cursor-pointer role-switch-card" id="switchCardArnav" style="background: #F8FAFC;">
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="user-avatar-circle">A</div>
+                  <div>
+                    <div class="fw-bold text-dark">Arnav</div>
+                    <div class="small text-primary fw-semibold">Logistics Manager</div>
+                  </div>
+                </div>
+                <span class="badge bg-primary">Full Fleet Oversight</span>
               </div>
+              <div class="small text-muted mt-2">Can register packages, request cancellations, regulate temperature excursions, and authorize deletions.</div>
             </div>
-            <div class="mb-3">
-              <label for="deleteAuthPassword" class="form-label small fw-semibold">Password</label>
-              <div class="input-group input-group-sm">
-                <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                <input type="password" id="deleteAuthPassword" class="form-control" placeholder="••••" required autocomplete="current-password">
+
+            <div class="p-3 border rounded-3 cursor-pointer role-switch-card" id="switchCardSourabh" style="background: #F8FAFC;">
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="user-avatar-circle" style="background: #0D9488;">S</div>
+                  <div>
+                    <div class="fw-bold text-dark">Sourabh</div>
+                    <div class="small text-teal fw-semibold">Warehouse Operator</div>
+                  </div>
+                </div>
+                <span class="badge bg-teal text-white">Depot Authority</span>
               </div>
+              <div class="small text-muted mt-2">Can approve/reject shipment cancellations, mark packages as delivered, and dispatch alert requests.</div>
             </div>
           </div>
-          <div class="modal-footer bg-light py-2">
-            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-danger btn-sm">
-              <i class="bi bi-trash3 me-1"></i> Confirm &amp; Delete
-            </button>
-          </div>
-        </form>
+        </div>
+        <div class="modal-footer bg-light py-2">
+          <button type="button" class="btn btn-crm-outline btn-sm" data-bs-dismiss="modal">Cancel</button>
+        </div>
       </div>
     </div>
   </div>
@@ -405,44 +959,45 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content border-0 shadow">
         <div class="modal-header bg-navy text-white">
-          <h6 class="modal-title fw-bold"><i class="bi bi-plus-square me-2"></i>Register New Shipment</h6>
+          <h6 class="modal-title fw-bold"><i class="bi bi-plus-square me-2 text-info"></i>Register Refrigerated Consignment</h6>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <form id="addShipmentForm">
-          <div class="modal-body row g-2">
+          <div class="modal-body row g-3">
             <div id="addShipmentError" class="alert alert-danger py-1 small d-none" role="alert"></div>
+            
             <div class="col-6">
-              <label for="newShipmentId" class="form-label small fw-semibold">Shipment ID</label>
-              <input type="text" id="newShipmentId" class="form-control form-control-sm" placeholder="SHP-105" required>
+              <label for="newShipmentId" class="form-label small fw-semibold text-dark">Consignment ID</label>
+              <input type="text" id="newShipmentId" class="form-control" placeholder="e.g. SHP-109" required>
             </div>
             <div class="col-6">
-              <label for="newCargo" class="form-label small fw-semibold">Cargo Type</label>
-              <input type="text" id="newCargo" class="form-control form-control-sm" placeholder="Blood Plasma" required>
+              <label for="newCargo" class="form-label small fw-semibold text-dark">Cargo Type / Commodity</label>
+              <input type="text" id="newCargo" class="form-control" placeholder="e.g. Blood Plasma" required>
             </div>
             <div class="col-6">
-              <label for="newOrigin" class="form-label small fw-semibold">Origin City</label>
-              <input type="text" id="newOrigin" class="form-control form-control-sm" placeholder="Jaipur" required>
+              <label for="newOrigin" class="form-label small fw-semibold text-dark">Origin Hub</label>
+              <input type="text" id="newOrigin" class="form-control" placeholder="e.g. Jaipur" required>
             </div>
             <div class="col-6">
-              <label for="newDest" class="form-label small fw-semibold">Destination City</label>
-              <input type="text" id="newDest" class="form-control form-control-sm" placeholder="Delhi" required>
+              <label for="newDest" class="form-label small fw-semibold text-dark">Destination Hub</label>
+              <input type="text" id="newDest" class="form-control" placeholder="e.g. Bengaluru" required>
             </div>
             <div class="col-4">
-              <label for="newMinTemp" class="form-label small fw-semibold">Min Temp (°C)</label>
-              <input type="number" step="0.1" id="newMinTemp" class="form-control form-control-sm" placeholder="2.0" required>
+              <label for="newMinTemp" class="form-label small fw-semibold text-dark">Min Temp (°C)</label>
+              <input type="number" step="0.1" id="newMinTemp" class="form-control" placeholder="2.0" required>
             </div>
             <div class="col-4">
-              <label for="newMaxTemp" class="form-label small fw-semibold">Max Temp (°C)</label>
-              <input type="number" step="0.1" id="newMaxTemp" class="form-control form-control-sm" placeholder="8.0" required>
+              <label for="newMaxTemp" class="form-label small fw-semibold text-dark">Max Temp (°C)</label>
+              <input type="number" step="0.1" id="newMaxTemp" class="form-control" placeholder="8.0" required>
             </div>
             <div class="col-4">
-              <label for="newInitialTemp" class="form-label small fw-semibold">Initial Temp (°C)</label>
-              <input type="number" step="0.1" id="newInitialTemp" class="form-control form-control-sm" placeholder="4.5" required>
+              <label for="newInitialTemp" class="form-label small fw-semibold text-dark">Initial Ping (°C)</label>
+              <input type="number" step="0.1" id="newInitialTemp" class="form-control" placeholder="4.5" required>
             </div>
           </div>
           <div class="modal-footer bg-light py-2">
-            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-success btn-sm">Save Shipment</button>
+            <button type="button" class="btn btn-crm-outline btn-sm" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-crm-primary btn-sm">Save &amp; Activate Sensor</button>
           </div>
         </form>
       </div>
@@ -454,7 +1009,7 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content border-0 shadow">
         <div class="modal-header bg-navy text-white">
-          <h6 class="modal-title fw-bold"><i class="bi bi-thermometer-sun me-2"></i>Regulate Package Temperature</h6>
+          <h6 class="modal-title fw-bold"><i class="bi bi-thermometer-sun me-2 text-info"></i>Regulate Consignment Temperature</h6>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <form id="resolveForm">
@@ -462,40 +1017,40 @@
             <input type="hidden" id="resolveAlertId">
             <input type="hidden" id="resolveShipmentId">
 
-            <div class="p-2 bg-light rounded mb-3 small">
-              <div>Shipment: <strong id="resShipmentRef">---</strong></div>
+            <div class="p-3 bg-light rounded-3 mb-3 small border">
+              <div>Consignment: <strong id="resShipmentRef" class="text-dark">---</strong></div>
               <div>Cargo: <span id="resCargo">---</span></div>
-              <div class="mt-1">Authorized Range: <span class="badge bg-secondary font-monospace" id="resSafeRange">---</span></div>
-              <div>Current Excursion: <strong class="text-danger" id="resCurrentTemp">---</strong></div>
+              <div class="mt-1">Prescribed Safe Limits: <span class="badge bg-secondary font-monospace" id="resSafeRange">---</span></div>
+              <div class="mt-1">Observed Thermal Excursion: <strong class="text-danger" id="resCurrentTemp">---</strong></div>
             </div>
 
             <div id="resolveWarningBox" class="alert alert-danger py-2 small d-none" role="alert">
               <i class="bi bi-exclamation-triangle-fill me-1"></i>
-              <span id="resolveWarningMsg">Input value must be within the authorized range!</span>
+              <span id="resolveWarningMsg">Regulated reading must be within prescribed limits!</span>
             </div>
 
             <div class="mb-3">
-              <label for="regulatedTempInput" class="form-label small fw-semibold">Regulated Temperature (°C)</label>
+              <label for="regulatedTempInput" class="form-label small fw-semibold text-dark">Regulated Target Reading (°C)</label>
               <input type="number" step="0.1" id="regulatedTempInput" class="form-control" placeholder="Enter corrected reading within range" required>
-              <div class="form-text small">Enter temperature adjusted back within safe cooling bounds.</div>
+              <div class="form-text small">Enter temperature adjusted back within verified safe bounds.</div>
             </div>
           </div>
           <div class="modal-footer bg-light py-2">
-            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-success btn-sm">Confirm &amp; Resolve Alert</button>
+            <button type="button" class="btn btn-crm-outline btn-sm" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-crm-primary btn-sm">Confirm &amp; Resolve Alert</button>
           </div>
         </form>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: REQUEST SHIPMENT CANCELLATION (SENT TO WAREHOUSE OPERATOR FOR APPROVAL) -->
+  <!-- MODAL: REQUEST CANCELLATION (SENT TO OPERATOR) -->
   <div class="modal fade" id="cancelRequestModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content border-0 shadow">
         <div class="modal-header bg-danger text-white">
           <h6 class="modal-title fw-bold">
-            <i class="bi bi-send-exclamation me-2"></i>Request Shipment Cancellation
+            <i class="bi bi-send-exclamation me-2"></i>Initiate Cancellation Request
           </h6>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -503,32 +1058,32 @@
           <div class="modal-body">
             <input type="hidden" id="cancelShipmentId">
             <p class="small text-muted mb-3">
-              Initiate cancellation for <strong id="cancelShipmentLabel" class="text-dark">---</strong>. This request will be sent to the <strong>Warehouse Operator</strong> for review &amp; approval.
+              Request formal cancellation for <strong id="cancelShipmentLabel" class="text-dark">---</strong>. This request will be queued for <strong>Warehouse Operator (Sourabh)</strong> verification and approval.
             </p>
             <div class="mb-3">
-              <label for="cancelReasonSelect" class="form-label small fw-semibold">Reason for Cancellation</label>
+              <label for="cancelReasonSelect" class="form-label small fw-semibold text-dark">Reason for Cancellation</label>
               <select id="cancelReasonSelect" class="form-select form-select-sm mb-2" required>
                 <option value="Severe Spoilage / Thermal Shock">Severe Spoilage / Thermal Shock</option>
                 <option value="Refrigeration Unit Mechanical Failure">Refrigeration Unit Mechanical Failure</option>
                 <option value="Route Diverted / Client Cancelled">Route Diverted / Client Cancelled</option>
                 <option value="Damaged Cargo Seals">Damaged Cargo Seals</option>
-                <option value="NONE">None of these (write my own reason)</option>
+                <option value="NONE">None of these (write custom reason)</option>
               </select>
 
               <div id="customReasonBox" class="d-none mb-2">
-                <label for="customReasonInput" class="form-label small fw-semibold text-danger">Write your custom reason:</label>
-                <textarea id="customReasonInput" class="form-control form-control-sm" rows="2" placeholder="Type the specific reason for cancelling this shipment..."></textarea>
-                <div id="customReasonError" class="text-danger small d-none mt-1" role="alert">Please write a reason before submitting.</div>
+                <label for="customReasonInput" class="form-label small fw-semibold text-danger">Custom Justification:</label>
+                <textarea id="customReasonInput" class="form-control" rows="2" placeholder="Specify custom operational cause..."></textarea>
+                <div id="customReasonError" class="text-danger small d-none mt-1" role="alert">Please specify a reason before submitting.</div>
               </div>
 
-              <label for="cancelReasonNotes" class="form-label small fw-semibold">Additional Remarks</label>
-              <textarea id="cancelReasonNotes" class="form-control form-control-sm" rows="2" placeholder="Optional notes or remarks..."></textarea>
+              <label for="cancelReasonNotes" class="form-label small fw-semibold text-dark">Additional Inspection Remarks</label>
+              <textarea id="cancelReasonNotes" class="form-control" rows="2" placeholder="Inspection notes, container status, driver notes..."></textarea>
             </div>
           </div>
           <div class="modal-footer bg-light py-2">
-            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Back</button>
+            <button type="button" class="btn btn-crm-outline btn-sm" data-bs-dismiss="modal">Back</button>
             <button type="submit" class="btn btn-danger btn-sm" id="btnSubmitCancel">
-              <i class="bi bi-send me-1"></i> Send Cancellation Request
+              <i class="bi bi-send me-1"></i> Submit Cancellation Request
             </button>
           </div>
         </form>
@@ -536,36 +1091,126 @@
     </div>
   </div>
 
-  <!-- MODAL: SHIPMENT DIAGNOSTICS & TELEMETRY HISTORY -->
-  <div class="modal fade" id="detailsModal" tabindex="-1" aria-hidden="true">
+  <!-- MODAL: DELETE AUTHORIZATION REQUIRING USER ID & PASSWORD -->
+  <div class="modal fade" id="deleteAuthModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content border-0 shadow">
-        <div class="modal-header bg-navy text-white">
-          <h6 class="modal-title fw-bold" id="modalTitle">Shipment Telemetry</h6>
+        <div class="modal-header bg-danger text-white">
+          <h6 class="modal-title fw-bold">
+            <i class="bi bi-shield-lock me-2"></i>Delete Security Re-Authorization
+          </h6>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
-          <div class="d-flex justify-content-between p-2 bg-light rounded mb-3 small">
-            <div><strong>Limits: </strong><span id="modalLimits"></span></div>
-            <div><strong>Latest Reading: </strong><span id="modalCurrent"></span></div>
+        <form id="deleteAuthForm">
+          <div class="modal-body p-4">
+            <p class="small text-muted mb-3">
+              Safety guard: Permanent deletion of <strong id="deleteTargetShipmentId" class="text-danger">---</strong> requires credential verification by an authorized Logistics Manager.
+            </p>
+            <div id="deleteAuthError" class="alert alert-danger py-2 small d-none" role="alert">
+              <i class="bi bi-exclamation-triangle-fill me-1"></i> Invalid User ID or Password. Deletion unauthorized.
+            </div>
+            <div class="mb-3">
+              <label for="deleteAuthUserId" class="form-label small fw-semibold text-dark">Manager User ID</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                <input type="text" id="deleteAuthUserId" class="form-control" placeholder="e.g. Arnav" required autocomplete="username">
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="deleteAuthPassword" class="form-label small fw-semibold text-dark">Manager Password</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                <input type="password" id="deleteAuthPassword" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+              </div>
+            </div>
           </div>
+          <div class="modal-footer bg-light py-2">
+            <button type="button" class="btn btn-crm-outline btn-sm" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-danger btn-sm">
+              <i class="bi bi-trash3 me-1"></i> Confirm &amp; Delete
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: SHIPMENT DIAGNOSTICS & TELEMETRY CHART DRAWER -->
+  <div class="modal fade" id="detailsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 shadow-lg">
+        <div class="modal-header bg-navy text-white">
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-graph-up text-info fs-5"></i>
+            <div>
+              <h6 class="modal-title fw-bold" id="modalTitle">Shipment Telemetry Diagnostics</h6>
+              <div class="small text-white-50" style="font-size: 0.72rem;">Full Sensor Telemetry, Thermal Bands &amp; Ping History</div>
+            </div>
+          </div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <!-- Summary info row -->
+          <div class="row g-3 mb-3">
+            <div class="col-4">
+              <div class="p-2 border rounded-3 bg-light text-center">
+                <div class="text-muted small">Configured Range</div>
+                <div class="fw-bold text-dark font-monospace" id="modalLimits">--</div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="p-2 border rounded-3 bg-light text-center">
+                <div class="text-muted small">Latest Reading</div>
+                <div class="fw-bold text-primary font-monospace" id="modalCurrent">--</div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="p-2 border rounded-3 bg-light text-center">
+                <div class="text-muted small">Sensor Hardware</div>
+                <div class="fw-bold text-success font-monospace" id="modalSensorId">SEN-IoT</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive Telemetry Line Chart -->
+          <div class="border rounded-3 p-3 mb-3 bg-white" style="height: 240px; position: relative;">
+            <canvas id="shipmentDetailChart"></canvas>
+          </div>
+
+          <!-- Manual Ping Simulation (when Active) -->
           <form id="addPingForm" class="input-group input-group-sm mb-3">
-            <input type="number" step="0.1" id="manualTempInput" class="form-control" placeholder="Simulate Temp (°C)" aria-label="Simulate temperature" required>
-            <button class="btn btn-primary" type="submit">Record IoT Ping</button>
+            <span class="input-group-text bg-light text-dark fw-semibold">Simulate IoT Ping:</span>
+            <input type="number" step="0.1" id="manualTempInput" class="form-control" placeholder="Target Temperature (°C)" aria-label="Simulate temperature" required>
+            <button class="btn btn-crm-primary" type="submit">Record Ping</button>
           </form>
-          <h6 class="fw-bold small text-dark mb-2">Telemetry History (Chronological)</h6>
-          <ul class="list-group list-group-flush small border rounded" id="modalHistoryList"></ul>
+
+          <h6 class="fw-bold small text-dark mb-2">Chronological Sensor Ping Stream</h6>
+          <div class="table-responsive border rounded" style="max-height: 180px; overflow-y: auto;">
+            <table class="crm-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Observed Reading</th>
+                  <th>Threshold Delta</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="modalHistoryList"></tbody>
+            </table>
+          </div>
         </div>
         <div class="modal-footer bg-light py-2">
-          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-crm-outline btn-sm" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Chart.js 4.4.2 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Consolidated Application Logic -->
+  <!-- Master Application Controller -->
   <script src="script.js"></script>
 </body>
 </html>
