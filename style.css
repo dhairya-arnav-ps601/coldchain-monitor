@@ -1,147 +1,53 @@
+/**
+ * ColdChain Monitor - Compressed Stylesheet (style.css)
+ * Course: Applied AI - Frontend Development Basics
+ * Tech: CSS3 Variables, Flexbox, Responsive Grid & Bootstrap 5
+ */
+:root {
+  --navy: #0f172a;
+  --cyan: #38bdf8;
+  --normal: #10b981;
+  --warning: #f59e0b;
+  --critical: #ef4444;
+}
+body { background: #f8fafc; color: #1e293b; font-family: system-ui, -apple-system, sans-serif; min-height: 100vh; }
+.bg-navy { background-color: var(--navy) !important; }
+.text-cyan { color: var(--cyan) !important; }
+.brand-sub { font-size: 0.68rem; letter-spacing: 0.05em; color: #ffffff !important; }
+.cursor-pointer { cursor: pointer; }
 
-    /**
-     * ColdChain Monitor Stylesheet (style.css)
-     * Course: Applied AI - Frontend Development Basics
-     * Focus: CSS3 Variables, Responsive Flexbox & Grid, Contrast & Role Hierarchy
-     */
+/* User Chip */
+.user-chip { cursor: pointer; transition: background 0.2s ease; user-select: none; }
+.user-chip:hover { background-color: rgba(255, 255, 255, 0.2) !important; }
 
-    :root {
-      --navy: #0f172a;
-      --navy-surface: #1e293b;
-      --cyan: #38bdf8;
-      --normal: #10b981;
-      --warning: #f59e0b;
-      --critical: #ef4444;
-      --teal: #0d9488;
-    }
+/* Login */
+.login-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--navy), #1e3a5f); padding: 1.5rem; }
+.login-card { max-width: 420px; width: 100%; border-radius: 14px; background: #fff; }
 
-    body {
-      background-color: #f8fafc;
-      color: #1e293b;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+/* Nav Links */
+.navbar-nav .nav-link { font-size: 0.88rem; font-weight: 500; transition: background 0.15s; }
+.navbar-nav .nav-link:hover { background: rgba(255, 255, 255, 0.1); }
+.navbar-nav .nav-link.active { background: rgba(255, 255, 255, 0.22); font-weight: 600; }
 
-    .bg-navy { background-color: var(--navy) !important; }
-    .text-cyan { color: var(--cyan) !important; }
-    .text-teal { color: var(--teal) !important; }
-    .bg-teal { background-color: var(--teal) !important; }
-    .cursor-pointer { cursor: pointer; }
+/* KPI Cards */
+.kpi-card { border: none; border-left: 4px solid; border-radius: 8px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: transform 0.15s; }
+.kpi-card:hover { transform: translateY(-2px); }
 
-    /* Brand subtext - White for high visibility against dark navy navbar */
-    .brand-sub {
-      color: #ffffff !important;
-      opacity: 0.95;
-      font-weight: 500;
-      letter-spacing: 0.05em;
-    }
+/* Badges */
+.badge-status { display: inline-flex; align-items: center; padding: 0.35rem 0.65rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; }
+.badge-Normal { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+.badge-Warning { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+.badge-Critical { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
 
-    /* User Profile Chip in Navbar - Clickable for single user profile */
-    .user-chip {
-      cursor: pointer;
-      transition: all 0.2s ease;
-      user-select: none;
-    }
-    .user-chip:hover {
-      background-color: rgba(255, 255, 255, 0.2) !important;
-      transform: translateY(-1px);
-    }
-    .user-chip:focus-visible {
-      outline: 2px solid var(--cyan);
-      outline-offset: 2px;
-    }
+/* Alerts & Queue Items */
+.alert-item, .request-item { background: #fff; padding: 0.85rem 1rem; border-radius: 8px; border: 1px solid #e2e8f0; border-left-width: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+.alert-item.Critical { border-left-color: var(--critical); background-color: #fffbfb; }
+.alert-item.Warning, .request-item.Pending { border-left-color: var(--warning); background-color: #fffdf7; }
+.alert-item.Resolved, .request-item.Rejected { border-left-color: #94a3b8; opacity: 0.8; background-color: #f8fafc; }
+.request-item.Approved { border-left-color: var(--normal); background-color: #f0fdf4; }
 
-    /* Login Container */
-    .login-container {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, var(--navy) 0%, #1e3a5f 100%);
-      padding: 1.5rem;
-    }
-
-    .login-card {
-      max-width: 420px;
-      width: 100%;
-      border-radius: 14px;
-      background-color: #ffffff;
-    }
-
-    /* Navbar Links */
-    .navbar-nav .nav-link {
-      font-size: 0.88rem;
-      font-weight: 500;
-      transition: background-color 0.15s ease;
-    }
-    .navbar-nav .nav-link:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
-    .navbar-nav .nav-link.active {
-      background: rgba(255, 255, 255, 0.22);
-      font-weight: 600;
-    }
-
-    /* KPI Summary Cards */
-    .kpi-card {
-      border: none;
-      border-left-width: 4px;
-      border-radius: 8px;
-      background: #ffffff;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-    .kpi-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Status Badges */
-    .badge-status {
-      display: inline-flex;
-      align-items: center;
-      padding: 0.35rem 0.65rem;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-    }
-    .badge-Normal { background-color: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
-    .badge-Warning { background-color: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
-    .badge-Critical { background-color: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
-
-    /* Alert & Request Card Items */
-    .alert-item, .request-item {
-      background: #ffffff;
-      padding: 0.85rem 1rem;
-      border-radius: 8px;
-      border: 1px solid #e2e8f0;
-      border-left-width: 4px;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-    }
-    .alert-item.Critical { border-left-color: var(--critical); background-color: #fffbfb; }
-    .alert-item.Warning { border-left-color: var(--warning); background-color: #fffdf7; }
-    .alert-item.Resolved { border-left-color: #94a3b8; opacity: 0.75; background-color: #f8fafc; }
-    .request-item.Pending { border-left-color: var(--warning); background-color: #fffdf7; }
-    .request-item.Approved { border-left-color: var(--normal); background-color: #f0fdf4; }
-    .request-item.Rejected { border-left-color: #94a3b8; opacity: 0.8; background-color: #f8fafc; }
-
-    /* Profile Modal Avatar & Details */
-    .profile-modal-avatar {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2rem;
-      background: var(--navy);
-      color: var(--cyan);
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
-    }
-
-    @media (max-width: 768px) {
-      .navbar-nav .nav-link { font-size: 0.8rem; padding: 0.35rem 0.5rem; }
-    }
+/* Profile Avatar */
+.profile-modal-avatar { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; background: var(--navy); color: var(--cyan); }
+[data-bs-theme="dark"] body { background: #0b1120; color: #cbd5e1; }
+[data-bs-theme="dark"] :is(.card, .kpi-card, .card-header, .alert-item, .request-item, .modal-content, .modal-footer, .table, .table-light, .form-control, .form-select, .input-group-text, .list-group-item, .login-card, .bg-white, .bg-light) { background-color: #1e293b !important; color: #f1f5f9 !important; border-color: #334155; }
+[data-bs-theme="dark"] :is(.text-muted, .text-dark, .text-secondary) { color: #94a3b8 !important; } [data-bs-theme="dark"] tr:hover td { background-color: #273549 !important; }
