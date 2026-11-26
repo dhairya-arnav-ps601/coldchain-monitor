@@ -1,27 +1,10 @@
 /**
  * ColdChain Monitor - Application Controller (script.js)
- * Built with Vanilla ES6+ JavaScript, DOM APIs, and Firebase Realtime Database cloud sync.
+ * Built with Vanilla ES6+ JavaScript, DOM APIs, and Firebase Realtime Database REST API.
  */
 
-// 1. Firebase Cloud Configuration (Shared Real-Time Database for All Users)
-const firebaseConfig = {
-  apiKey: "AIzaSyA0zy8BZfKXM3YH8pSZdd5UOJjB89P3Y-A",
-  authDomain: "coldchain-monitor-eb213.firebaseapp.com",
-  databaseURL: "https://coldchain-monitor-eb213-default-rtdb.firebaseio.com",
-  projectId: "coldchain-monitor-eb213",
-  storageBucket: "coldchain-monitor-eb213.firebasestorage.app",
-  messagingSenderId: "422799366419",
-  appId: "1:422799366419:web:992cbe5202513f78d622e6",
-  measurementId: "G-W6D99EXX6K"
-};
-
-let cloudRef = null;
-if (window.firebase && typeof firebase.initializeApp === "function") {
-  if (!firebase.apps || firebase.apps.length === 0) {
-    firebase.initializeApp(firebaseConfig);
-  }
-  cloudRef = firebase.database().ref("coldchain");
-}
+// 1. Firebase Cloud Database Endpoint (Shared Real-Time Storage for All Users)
+const FIREBASE_DB_URL = "https://coldchain-monitor-eb213-default-rtdb.firebaseio.com/coldchain.json";
 
 // 2. Authorized User Accounts & Default Profile Metadata
 const USERS = [
@@ -92,8 +75,9 @@ function closeModal(id) {
   const el = getEl(id);
   if (!el) return;
   if (window.bootstrap && bootstrap.Modal) {
-    const instance = bootstrap.Modal.getInstance(el);
-    if (instance) instance.hide();
+    const instance = bootstrap.Modal.getOrCreateInstance(el);
+    instance.hide();
+    return;
   }
   el.classList.remove("show");
   el.style.display = "none";
@@ -175,10 +159,12 @@ function applyCloudSnapshot(rawData) {
   });
 }
 
-function saveState() {
-  if (!cloudRef) return;
-  updateCloudStatus("Syncing...", "Saving to cloud", false);
-  cloudRef.set({
+let isSavingToCloud = false;
+let hasQueuedSave = false;
+let lastCloudSignature = "";
+
+function buildCloudPayload() {
+  return {
     shipments,
     alerts,
     cancellations,
@@ -186,11 +172,42 @@ function saveState() {
     reports,
     reportNotices,
     profiles
-  }).then(() => {
-    updateCloudStatus("System Online", "Cloud Synced " + getCurrentTime(), false);
-  }).catch(err => {
-    updateCloudStatus("Sync Error", (err && err.message) || "Check Firebase Rules", true);
-  });
+  };
+}
+
+function saveState() {
+  if (typeof fetch !== "function") return;
+  if (isSavingToCloud) {
+    hasQueuedSave = true;
+    return;
+  }
+
+  isSavingToCloud = true;
+  updateCloudStatus("Syncing...", "Saving to cloud", false);
+
+  const payload = buildCloudPayload();
+  const payloadJson = JSON.stringify(payload);
+
+  fetch(FIREBASE_DB_URL, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: payloadJson
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      lastCloudSignature = payloadJson;
+      updateCloudStatus("System Online", "Cloud Synced " + getCurrentTime(), false);
+    })
+    .catch(err => {
+      updateCloudStatus("Sync Error", (err && err.message) || "Save failed", true);
+    })
+    .finally(() => {
+      isSavingToCloud = false;
+      if (hasQueuedSave) {
+        hasQueuedSave = false;
+        saveState();
+      }
+    });
 }
 
 function applyTheme(theme) {
@@ -290,7 +307,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Check active shipments and create unread alerts for any new Warning/Critical readings
   function evaluateAllShipments() {
-    if (cloudRef && !cloudReady) return;
+    if (!cloudReady) return;
     let addedNewAlert = false;
 
     getActiveShipments().forEach(shipment => {
@@ -1882,25 +1899,39 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  // Subscribe to real-time Firebase cloud updates so all users see changes instantly
-  if (cloudRef) {
-    cloudRef.on("value", snapshot => {
-      applyCloudSnapshot(snapshot.val());
-      cloudReady = true;
-      updateCloudStatus("System Online", "Cloud Synced", false);
-      if (currentUser) {
-        syncHeaderProfile();
-        if (currentActiveView === "Alerts") markCurrentAlertsAsRead();
-        if (currentActiveView === "Reports") markReportsViewedByWarehouse();
-        refreshAll();
-      }
-    }, err => {
-      updateCloudStatus("Sync Error", (err && err.message) || "Check Firebase Rules", true);
-    });
-  } else {
-    cloudReady = true;
-    updateCloudStatus("Offline Mode", "Cloud SDK unavailable", true);
+  // Load shared state from Firebase REST API and poll every 4s for live multi-user sync
+  function syncFromCloud() {
+    if (typeof fetch !== "function" || isSavingToCloud) return Promise.resolve();
+
+    return fetch(FIREBASE_DB_URL, { cache: "no-store" })
+      .then(res => {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then(data => {
+        if (isSavingToCloud) return;
+        const incomingSignature = JSON.stringify(data || {});
+        const firstLoad = !cloudReady;
+        cloudReady = true;
+
+        if (firstLoad || incomingSignature !== lastCloudSignature) {
+          lastCloudSignature = incomingSignature;
+          applyCloudSnapshot(data);
+          if (currentUser) {
+            syncHeaderProfile();
+            if (currentActiveView === "Alerts") markCurrentAlertsAsRead();
+            if (currentActiveView === "Reports") markReportsViewedByWarehouse();
+            refreshAll();
+          }
+        }
+        updateCloudStatus("System Online", "Cloud Synced", false);
+      })
+      .catch(err => {
+        updateCloudStatus("Sync Error", (err && err.message) || "Connection issue", true);
+      });
   }
 
   setAuth(currentUser);
+  syncFromCloud();
+  setInterval(syncFromCloud, 4000);
 });
