@@ -147,6 +147,7 @@ function applyCloudSnapshot(rawData) {
     questions: normalizeArray(r.questions)
   }));
   reportNotices = normalizeArray(data.reportNotices);
+  reportRequests = normalizeArray(data.reportRequests);
 
   const cloudProfiles = data.profiles && typeof data.profiles === "object" ? data.profiles : {};
   profiles = JSON.parse(JSON.stringify(DEFAULT_PROFILES));
@@ -189,6 +190,7 @@ function normalizeSnapshotForCompare(rawData) {
     managerNotifications: normalizeArray(data.managerNotifications),
     reports: normalizeArray(data.reports).map(r => ({ ...r, questions: normalizeArray(r.questions) })),
     reportNotices: normalizeArray(data.reportNotices),
+    reportRequests: normalizeArray(data.reportRequests),
     profiles: mergedProfiles
   };
 }
@@ -201,6 +203,7 @@ function buildCloudPayload() {
     managerNotifications,
     reports,
     reportNotices,
+    reportRequests,
     profiles
   };
 }
@@ -277,6 +280,7 @@ let cancellations = [];
 let managerNotifications = [];
 let reports = [];
 let reportNotices = [];
+let reportRequests = [];
 let profiles = JSON.parse(JSON.stringify(DEFAULT_PROFILES));
 let cloudReady = false;
 
@@ -898,6 +902,36 @@ document.addEventListener("DOMContentLoaded", () => {
     getEl("unresolvedBadge").textContent = `${unresolvedCount} Active`;
 
     getEl("alertsList").innerHTML = alerts.map(alertItem => {
+      if (alertItem.type === "ReportRequest") {
+        const isFulfilled = alertItem.state === "Resolved";
+        const ackBtn = !isFulfilled
+          ? `<button class="btn btn-sm btn-outline-primary py-0" onclick="acknowledgeAlert('${alertItem.aid}')">Mark Seen</button>`
+          : '<span class="badge bg-success">Fulfilled / Seen</span>';
+
+        return `
+          <div class="alert-item mb-3 p-3 border rounded shadow-sm bg-white border-primary">
+            <div class="d-flex justify-content-between align-items-start gap-2">
+              <div class="d-flex align-items-start gap-2">
+                <i class="bi bi-file-earmark-arrow-up-fill text-primary fs-4 mt-1"></i>
+                <div>
+                  <div class="d-flex align-items-center gap-2 mb-1">
+                    <strong>${escapeHtml(alertItem.id)}</strong>
+                    ${alertItem.cargo ? `<span class="badge bg-light text-dark border">${escapeHtml(alertItem.cargo)}</span>` : ""}
+                    <span class="badge bg-primary">Report Requested</span>
+                  </div>
+                  <div class="fw-semibold mb-1">${escapeHtml(alertItem.title)}</div>
+                  <div class="small text-dark mb-1">${escapeHtml(alertItem.message)}</div>
+                  <small class="text-muted">Requested by: <strong>${escapeHtml(alertItem.requestedBy)}</strong> | ${escapeHtml(alertItem.time)}</small>
+                </div>
+              </div>
+              <div class="d-flex align-items-center gap-1">
+                ${ackBtn}
+                <button class="btn btn-sm btn-outline-danger py-0 ms-1" onclick="deleteAlert('${alertItem.aid}')" aria-label="Delete alert"><i class="bi bi-trash"></i></button>
+              </div>
+            </div>
+          </div>`;
+      }
+
       if (alertItem.type === "ReportDeleteRequest") {
         const canRespond = alertItem.state !== "Resolved" && currentUser && currentUser.role === alertItem.targetRole;
         let consentActions = "";
@@ -1336,14 +1370,14 @@ document.addEventListener("DOMContentLoaded", () => {
   function getReportsBadgeCount() {
     if (!currentUser) return 0;
     if (currentUser.role === "Logistics Manager") {
-      // Unanswered questions from Warehouse waiting for Manager details
-      let pendingReplies = 0;
+      // Unanswered Warehouse questions + pending Warehouse report requests
+      let pendingCount = reportRequests.filter(req => req.status === "Pending").length;
       reports.forEach(r => {
         (r.questions || []).forEach(q => {
-          if (!q.replyText) pendingReplies++;
+          if (!q.replyText) pendingCount++;
         });
       });
-      return pendingReplies;
+      return pendingCount;
     }
     // Unread reports or unread Manager replies for Warehouse
     let unreadItems = 0;
@@ -1403,28 +1437,96 @@ document.addEventListener("DOMContentLoaded", () => {
     refreshAll();
   };
 
+  function renderPendingReportRequests() {
+    const container = getEl("pendingReportRequestsContainer");
+    if (!container || !currentUser) return;
+
+    const pendingReqs = reportRequests.filter(req => req.status === "Pending");
+    if (pendingReqs.length === 0) {
+      container.innerHTML = "";
+      return;
+    }
+
+    const isManager = currentUser.role === "Logistics Manager";
+    const itemsHtml = pendingReqs.map(req => `
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 p-2 border rounded bg-light mb-2">
+        <div>
+          <span class="fw-bold">${escapeHtml(req.shipmentId)}</span>
+          ${req.cargo ? `<span class="badge bg-white text-dark border ms-1">${escapeHtml(req.cargo)}</span>` : ""}
+          <span class="badge bg-warning text-dark ms-1">Requested</span>
+          <div class="small mt-1">${escapeHtml(req.note)}</div>
+          <small class="text-muted">Requested by ${escapeHtml(req.requestedBy)} | ${escapeHtml(req.requestedAt)}</small>
+        </div>
+        <div>
+          ${isManager
+            ? `<button class="btn btn-sm btn-primary py-1" onclick="fillRequestedReport('${req.shipmentId}')"><i class="bi bi-pencil-square me-1"></i>Fill Report</button>`
+            : '<span class="badge bg-secondary">Sent to Manager</span>'}
+        </div>
+      </div>`).join("");
+
+    container.innerHTML = `
+      <div class="card table-card mb-3">
+        <div class="card-header bg-white fw-semibold py-2 px-3 d-flex justify-content-between align-items-center">
+          <span><i class="bi bi-inbox-fill text-warning me-1"></i> Pending Warehouse Report Requests (${pendingReqs.length})</span>
+        </div>
+        <div class="card-body p-3 pb-2">${itemsHtml}</div>
+      </div>`;
+  }
+
+  window.fillRequestedReport = shipmentId => {
+    const shipment = shipments.find(s => s.id === shipmentId);
+    const selectEl = getEl("reportShipmentSelect");
+    const statusEl = getEl("reportPackageStatus");
+    if (selectEl && shipment) {
+      selectEl.value = shipment.id;
+      if (statusEl) {
+        if (shipment.status === "Delivered") statusEl.value = "Delivered";
+        else if (shipment.status === "Spoiled") statusEl.value = "Spoiled";
+        else if (shipment.status === "Cancelled") statusEl.value = "Cancelled";
+        else {
+          const cond = evaluateTemp(getLatestReading(shipment).temp, shipment.min, shipment.max).status;
+          if (cond === "Critical") statusEl.value = "Critical - Excursion";
+          else if (cond === "Warning") statusEl.value = "Warning - Temperature Drift";
+          else statusEl.value = "Normal - In Transit";
+        }
+      }
+    }
+    if (getEl("reportDetailsInput")) getEl("reportDetailsInput").focus();
+  };
+
   function renderReports() {
     const isManager = currentUser && currentUser.role === "Logistics Manager";
     const isOperator = currentUser && currentUser.role === "Warehouse Operator";
 
     renderReportDeleteNotices();
+    renderPendingReportRequests();
     getEl("managerReportFormCard").classList.toggle("d-none", !isManager);
+    getEl("warehouseRequestReportCard").classList.toggle("d-none", !isOperator);
     getEl("reportsCountBadge").textContent = `${reports.length} Report${reports.length === 1 ? "" : "s"}`;
     getEl("navReportsBadge").textContent = getReportsBadgeCount();
+
+    const shipmentOptionsHtml = shipments.length === 0
+      ? '<option value="">No shipments registered yet</option>'
+      : shipments.map(s => {
+          const latest = getLatestReading(s);
+          return `<option value="${escapeHtml(s.id)}">${escapeHtml(s.id)} — ${escapeHtml(s.cargo)} (${escapeHtml(s.status)}, ${latest.temp}°C)</option>`;
+        }).join("");
 
     if (isManager) {
       const selectEl = getEl("reportShipmentSelect");
       const previousVal = selectEl.value;
-      if (shipments.length === 0) {
-        selectEl.innerHTML = '<option value="">No shipments registered yet</option>';
-      } else {
-        selectEl.innerHTML = shipments.map(s => {
-          const latest = getLatestReading(s);
-          return `<option value="${escapeHtml(s.id)}">${escapeHtml(s.id)} — ${escapeHtml(s.cargo)} (${escapeHtml(s.status)}, ${latest.temp}°C)</option>`;
-        }).join("");
-        if (previousVal && shipments.some(s => s.id === previousVal)) {
-          selectEl.value = previousVal;
-        }
+      selectEl.innerHTML = shipmentOptionsHtml;
+      if (previousVal && shipments.some(s => s.id === previousVal)) {
+        selectEl.value = previousVal;
+      }
+    }
+
+    if (isOperator) {
+      const reqSelectEl = getEl("reqReportShipmentSelect");
+      const prevReqVal = reqSelectEl.value;
+      reqSelectEl.innerHTML = shipmentOptionsHtml;
+      if (prevReqVal && shipments.some(s => s.id === prevReqVal)) {
+        reqSelectEl.value = prevReqVal;
       }
     }
 
@@ -1642,6 +1744,7 @@ document.addEventListener("DOMContentLoaded", () => {
     errorEl.classList.add("d-none");
 
     const shipment = shipments.find(s => s.id === shipmentId);
+    const nowStamp = getTimestamp();
     reports.unshift({
       id: "RPT-" + (idCounter++),
       shipmentId: shipmentId,
@@ -1649,15 +1752,77 @@ document.addEventListener("DOMContentLoaded", () => {
       packageStatus: packageStatus,
       summary: summary,
       createdBy: currentUser ? `${currentUser.name} (${currentUser.role})` : "Logistics Manager",
-      createdAt: getTimestamp(),
+      createdAt: nowStamp,
       viewedByWarehouse: false,
       questions: []
+    });
+
+    // Mark any pending Warehouse report requests for this package as Fulfilled
+    reportRequests.forEach(req => {
+      if (req.shipmentId === shipmentId && req.status === "Pending") {
+        req.status = "Fulfilled";
+        req.fulfilledAt = nowStamp;
+      }
+    });
+    alerts.forEach(a => {
+      if (a.type === "ReportRequest" && a.id === shipmentId && a.state !== "Resolved") {
+        a.state = "Resolved";
+        a.isRead = true;
+      }
     });
 
     getEl("reportDetailsInput").value = "";
     saveState();
     refreshAll();
     alert(`Report for ${shipmentId} sent to Warehouse.`);
+  };
+
+  getEl("requestReportForm").onsubmit = event => {
+    event.preventDefault();
+    const errorEl = getEl("requestReportError");
+    const shipmentId = getEl("reqReportShipmentSelect").value;
+    const note = getEl("reqReportNoteInput").value.trim();
+
+    if (!shipmentId) {
+      errorEl.textContent = "No shipments available to request a report for.";
+      errorEl.classList.remove("d-none");
+      return;
+    }
+    errorEl.classList.add("d-none");
+
+    const shipment = shipments.find(s => s.id === shipmentId);
+    const nowStamp = getTimestamp();
+    const requesterLabel = currentUser ? `${currentUser.name} (${currentUser.role})` : "Warehouse Operator";
+
+    reportRequests.unshift({
+      id: "RREQ-" + (idCounter++),
+      shipmentId: shipmentId,
+      cargo: shipment ? shipment.cargo : "",
+      note: note || "Please provide an updated status report for this package.",
+      requestedBy: requesterLabel,
+      requestedAt: nowStamp,
+      status: "Pending",
+      fulfilledAt: ""
+    });
+
+    alerts.unshift({
+      aid: "ALT-RREQ-" + (idCounter++),
+      id: shipmentId,
+      cargo: shipment ? shipment.cargo : "",
+      type: "ReportRequest",
+      state: "Active",
+      isRead: false,
+      targetRole: "Logistics Manager",
+      requestedBy: requesterLabel,
+      title: `Report Requested: ${shipmentId}`,
+      message: note || `${requesterLabel} requested a package status report for ${shipmentId}.`,
+      time: nowStamp
+    });
+
+    getEl("reqReportNoteInput").value = "";
+    saveState();
+    refreshAll();
+    alert(`Report request for ${shipmentId} sent to Logistics Manager.`);
   };
 
   window.askReportQuestion = (event, reportId) => {
@@ -1874,6 +2039,7 @@ document.addEventListener("DOMContentLoaded", () => {
     cancellations = cancellations.filter(c => c.shipmentId !== targetId);
     managerNotifications = managerNotifications.filter(n => n.shipmentId !== targetId);
     reports = reports.filter(r => r.shipmentId !== targetId);
+    reportRequests = reportRequests.filter(r => r.shipmentId !== targetId);
 
     saveState();
     closeModal("deleteAuthModal");
