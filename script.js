@@ -24,7 +24,7 @@ const DEFAULT_PROFILES = {
     details: {
       Email: "arnavpratap60@gmail.com",
       Phone: "852 8600 376",
-      "Station / Hub": "Polaris School of Technology Bangalore",
+      "Station Hub": "Polaris School of Technology Bangalore",
       "Shift Hours": "08:00 - 17:00 IST"
     }
   },
@@ -36,7 +36,7 @@ const DEFAULT_PROFILES = {
     details: {
       Email: "sourabh@coldchain.io",
       Phone: "70195 885 90",
-      "Station / Hub": "Polaris School of Technology Bangalore",
+      "Station Hub": "Polaris School of Technology Bangalore",
       "Shift Hours": "14:00 - 23:00 IST"
     }
   }
@@ -533,7 +533,7 @@ document.addEventListener("DOMContentLoaded", () => {
     getEl("editProfDuty").value = profile.duty || "";
     getEl("editProfEmail").value = (profile.details && profile.details.Email) || "";
     getEl("editProfPhone").value = (profile.details && profile.details.Phone) || "";
-    getEl("editProfHub").value = (profile.details && profile.details["Station / Hub"]) || "";
+    getEl("editProfHub").value = (profile.details && (profile.details["Station Hub"] || profile.details["Station / Hub"])) || "";
     getEl("editProfShift").value = (profile.details && profile.details["Shift Hours"]) || "";
     renderProfileModal(true);
   };
@@ -580,7 +580,7 @@ document.addEventListener("DOMContentLoaded", () => {
     profile.details = {
       Email: getEl("editProfEmail").value.trim(),
       Phone: getEl("editProfPhone").value.trim(),
-      "Station / Hub": getEl("editProfHub").value.trim(),
+      "Station Hub": getEl("editProfHub").value.trim(),
       "Shift Hours": getEl("editProfShift").value.trim()
     };
 
