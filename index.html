@@ -1,209 +1,794 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ColdChain Monitor — Refrigerated Freight Telemetry & Spoilage Alerts</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ColdChain Monitor — Refrigerated Freight Telemetry &amp; Spoilage Alerts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- 1. LOGIN -->
-  <section id="loginSection" class="login-container">
-    <div class="card login-card p-4 shadow-lg border-0 text-center">
-      <div class="d-inline-flex p-3 rounded-circle bg-primary bg-opacity-10 text-primary mb-2 mx-auto"><i class="bi bi-snow2 fs-1"></i></div>
-      <h3 class="fw-bold mb-1">ColdChain Monitor</h3>
-      <p class="text-muted small mb-4">Refrigerated Freight IoT Telemetry & Spoilage Alert System</p>
-      <form id="loginForm" class="text-start" novalidate>
-        <div class="mb-3">
-          <label for="loginUsername" class="form-label small fw-semibold">Username / ID</label>
-          <div class="input-group"><span class="input-group-text bg-light"><i class="bi bi-person"></i></span><input type="text" id="loginUsername" class="form-control" placeholder="Arnav / Sourabh" required autocomplete="username"></div>
+  <!-- 1. LOGIN SECTION (Split Screen) -->
+  <section id="loginSection" class="login-split">
+    <div class="login-hero">
+      <div class="login-brand">
+        <i class="bi bi-snow2 text-primary"></i>
+        <span>ColdChain Monitor<span class="text-primary">.</span></span>
+      </div>
+      <div class="login-hero-copy">
+        <h1 class="login-hero-title">One layer.<br>Every shipment<span class="text-primary">.</span></h1>
+        <p class="login-hero-desc">
+          Monitor your refrigerated shipments and protect cargo with real-time temperature intelligence.
+        </p>
+        <p class="login-hero-meta mb-0">GPS &middot; BLE &middot; Smart Labels &middot; Cold Chain &middot; Telemetry</p>
+      </div>
+      <div class="login-hero-foot">Cold-Chain Operations Control Layer</div>
+    </div>
+
+    <div class="login-panel">
+      <div class="card login-card border">
+        <div class="card-body p-4 p-sm-5">
+          <h2 class="h4 fw-bold mb-1">Sign in</h2>
+          <p class="text-muted small mb-4">Welcome back to your control layer.</p>
+
+          <form id="loginForm" novalidate>
+            <div class="mb-3">
+              <label for="loginUsername" class="form-label small fw-semibold">Username or Email</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                <input type="text" id="loginUsername" class="form-control" placeholder="Enter username" required autocomplete="username">
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="loginPassword" class="form-label small fw-semibold">Password</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                <input type="password" id="loginPassword" class="form-control" placeholder="Enter password" required autocomplete="current-password">
+                <button class="btn btn-outline-secondary" type="button" id="togglePasswordBtn" aria-label="Show or hide password" title="Toggle password visibility">
+                  <i class="bi bi-eye" id="togglePasswordIcon"></i>
+                </button>
+              </div>
+            </div>
+
+            <div id="loginError" class="alert alert-danger py-2 small d-none">
+              <i class="bi bi-exclamation-triangle-fill me-1"></i> Invalid username or password.
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold mt-1" id="loginSubmit">
+              Sign in to Monitor
+            </button>
+          </form>
         </div>
-        <div class="mb-3">
-          <label for="loginPassword" class="form-label small fw-semibold">Password</label>
-          <div class="input-group"><span class="input-group-text bg-light"><i class="bi bi-lock"></i></span><input type="password" id="loginPassword" class="form-control" placeholder="•••• (123)" required autocomplete="current-password"></div>
-        </div>
-        <div id="loginError" class="alert alert-danger py-2 small d-none"><i class="bi bi-exclamation-triangle-fill me-1"></i> Invalid username or password.</div>
-        <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold" id="loginSubmit"><i class="bi bi-box-arrow-in-right me-1"></i> Sign In to Monitor</button>
-      </form>
+      </div>
     </div>
   </section>
 
-  <!-- 2. MAIN APP -->
-  <div id="appSection" class="d-none">
-    <header class="navbar navbar-expand-lg navbar-dark bg-navy px-3 py-2 sticky-top shadow-sm">
-      <div class="container-fluid flex-wrap gap-2">
-        <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#"><i class="bi bi-snow text-cyan fs-3"></i><div><span class="d-block leading-tight text-white">ColdChain Monitor</span><span class="brand-sub d-none d-sm-block">IoT TELEMETRY &amp; SPOILAGE PREVENTION</span></div></a>
-        <ul class="navbar-nav me-auto d-flex flex-row flex-wrap gap-1" id="mainNavBar">
-          <li class="nav-item"><button class="nav-link btn btn-link text-white active px-2 py-1 rounded" id="navDashboard" type="button"><i class="bi bi-speedometer2 me-1"></i> Dashboard</button></li>
-          <li class="nav-item"><button class="nav-link btn btn-link text-white px-2 py-1 rounded" id="navAlerts" type="button"><i class="bi bi-shield-exclamation me-1"></i> Alerts <span class="badge bg-danger rounded-pill ms-1" id="navAlertsBadge">0</span></button></li>
-          <li class="nav-item" id="navCancelItem"><button class="nav-link btn btn-link text-white px-2 py-1 rounded" id="navCancellations" type="button"><i class="bi bi-x-octagon me-1"></i> Cancel Requests <span class="badge bg-warning text-dark rounded-pill ms-1" id="navCancelBadge">0</span></button></li>
-          <li class="nav-item"><button class="nav-link btn btn-link text-white px-2 py-1 rounded" id="navDelivered" type="button"><i class="bi bi-box-seam me-1"></i> Delivered <span class="badge bg-success rounded-pill ms-1" id="navDeliveredBadge">0</span></button></li>
-          <li class="nav-item"><button class="nav-link btn btn-link text-white px-2 py-1 rounded" id="navCancelled" type="button"><i class="bi bi-slash-circle me-1"></i> Cancelled <span class="badge bg-secondary rounded-pill ms-1" id="navCancelledBadge">0</span></button></li>
-        </ul>
+  <!-- 2. MAIN APPLICATION -->
+  <div id="appSection" class="app-shell d-none">
+    <div id="sidebarBackdrop" class="sidebar-backdrop d-none"></div>
+
+    <!-- Navy Sidebar -->
+    <aside id="appSidebar" class="app-sidebar" aria-label="Main navigation">
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">
+          <i class="bi bi-snow2"></i>
+        </div>
+        <div>
+          <div class="fw-bold text-white lh-sm">ColdChain</div>
+          <div class="sidebar-brand-sub">Monitor</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav" id="mainNavBar">
+        <button class="sidebar-link active" id="navDashboard" type="button">
+          <i class="bi bi-grid-1x2-fill"></i>
+          <span>Dashboard</span>
+        </button>
+
+        <button class="sidebar-link" id="navAlerts" type="button">
+          <i class="bi bi-bell-fill"></i>
+          <span>Alerts</span>
+          <span class="badge bg-secondary rounded-pill ms-auto" id="navAlertsBadge">0</span>
+        </button>
+
+        <div id="navCancelItem">
+          <button class="sidebar-link" id="navCancellations" type="button">
+            <i class="bi bi-x-octagon-fill"></i>
+            <span>Cancel Requests</span>
+            <span class="badge bg-warning text-dark rounded-pill ms-auto" id="navCancelBadge">0</span>
+          </button>
+        </div>
+
+        <button class="sidebar-link" id="navDelivered" type="button">
+          <i class="bi bi-box-seam-fill"></i>
+          <span>Delivered</span>
+          <span class="badge bg-success rounded-pill ms-auto" id="navDeliveredBadge">0</span>
+        </button>
+
+        <button class="sidebar-link" id="navCancelled" type="button">
+          <i class="bi bi-slash-circle-fill"></i>
+          <span>Cancelled</span>
+          <span class="badge bg-secondary rounded-pill ms-auto" id="navCancelledBadge">0</span>
+        </button>
+
+        <button class="sidebar-link" id="navSpoiled" type="button">
+          <i class="bi bi-exclamation-octagon-fill"></i>
+          <span>Spoiled</span>
+          <span class="badge bg-danger rounded-pill ms-auto" id="navSpoiledBadge">0</span>
+        </button>
+
+        <button class="sidebar-link" id="navReports" type="button">
+          <i class="bi bi-file-earmark-text-fill"></i>
+          <span>Reports</span>
+          <span class="badge bg-info text-dark rounded-pill ms-auto" id="navReportsBadge">0</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
         <div class="d-flex align-items-center gap-2">
-          <div class="user-chip d-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-white bg-opacity-10 border border-light border-opacity-25 text-white" id="userProfileChip" role="button" tabindex="0" title="Click to view profile">
-            <i class="bi bi-person-circle text-cyan fs-5"></i>
-            <div class="text-start" style="line-height: 1.15;"><span class="small fw-bold d-block" id="navUserName">User</span><span class="badge bg-light text-dark font-monospace" id="userRoleBadge" style="font-size: 0.65rem;">Role</span></div>
-          </div>
-          <button class="btn btn-outline-light btn-sm" id="btnTheme" title="Toggle Light/Dark Mode" type="button"><i class="bi bi-moon-stars" id="themeIcon"></i></button>
-          <button class="btn btn-danger btn-sm" id="btnLogout" title="Sign Out" type="button"><i class="bi bi-power"></i></button>
+          <span class="status-dot" id="cloudStatusDot"></span>
+          <span class="small fw-medium text-white" id="cloudStatusText">Connecting...</span>
         </div>
+        <small class="sidebar-status-sub d-block mt-1" id="cloudStatusSub">Firebase Cloud Sync</small>
       </div>
-    </header>
+    </aside>
 
-    <main class="container py-3">
-      <!-- DASHBOARD -->
-      <div id="viewDashboard">
-        <div id="managerNotificationsContainer"></div>
-        <section class="row g-2 mb-3" aria-label="Fleet KPIs">
-          <div class="col-6 col-md-3"><div class="card p-2 text-center kpi-card border-primary"><small class="text-muted text-uppercase fw-semibold" style="font-size: 0.72rem;">Active Shipments</small><h4 class="mb-0 fw-bold text-primary" id="statTotal">0</h4></div></div>
-          <div class="col-6 col-md-3"><div class="card p-2 text-center kpi-card border-success"><small class="text-muted text-uppercase fw-semibold" style="font-size: 0.72rem;">Normal Range</small><h4 class="mb-0 fw-bold text-success" id="statNormal">0</h4></div></div>
-          <div class="col-6 col-md-3"><div class="card p-2 text-center kpi-card border-warning"><small class="text-muted text-uppercase fw-semibold" style="font-size: 0.72rem;">Warning Alerts</small><h4 class="mb-0 fw-bold text-warning" id="statWarning">0</h4></div></div>
-          <div class="col-6 col-md-3"><div class="card p-2 text-center kpi-card border-danger cursor-pointer" id="kpiCriticalCard" role="button" tabindex="0" title="View Critical Alerts"><small class="text-muted text-uppercase fw-semibold" style="font-size: 0.72rem;">Critical Excursions</small><h4 class="mb-0 fw-bold text-danger" id="statCritical">0</h4></div></div>
-        </section>
-
-        <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-3">
-          <div class="d-flex gap-2 flex-grow-1" style="max-width: 480px;">
-            <div class="input-group input-group-sm"><span class="input-group-text bg-white"><i class="bi bi-search"></i></span><input type="text" id="searchInput" class="form-control" placeholder="Search ID, Cargo, Route..."></div>
-            <select id="statusFilter" class="form-select form-select-sm w-auto"><option value="ALL">All Condition</option><option value="Normal">Normal</option><option value="Warning">Warning</option><option value="Critical">Critical</option></select>
-          </div>
-          <div class="d-flex gap-2">
-            <button class="btn btn-sm btn-primary" id="btnSimulatePing" type="button"><i class="bi bi-broadcast me-1"></i> Check Current Status</button>
-            <button class="btn btn-sm btn-success" id="btnOpenAddShipment" type="button"><i class="bi bi-plus-circle me-1"></i> Register Shipment</button>
-          </div>
-        </div>
-
-        <div class="card border-0 shadow-sm mb-4">
-          <div class="card-header bg-white fw-bold d-flex justify-content-between align-items-center"><span><i class="bi bi-truck text-primary me-2"></i>Active Refrigerated Freight</span><small class="text-muted">IoT Monitored</small></div>
-          <div class="table-responsive"><table class="table table-hover align-middle mb-0"><thead class="table-light"><tr><th>Shipment ID</th><th>Cargo</th><th>Route</th><th>Safe Limits</th><th>Latest Temp</th><th>Condition</th><th class="text-end">Actions</th></tr></thead><tbody id="shipmentTableBody"></tbody></table></div>
-        </div>
+    <!-- Main Workspace -->
+    <div class="app-main">
+      <div class="bg-wave-decor" aria-hidden="true">
+        <svg viewBox="0 0 1440 220" preserveAspectRatio="none">
+          <path fill="currentColor" d="M0,128L80,138.7C160,149,320,171,480,165.3C640,160,800,128,960,117.3C1120,107,1280,117,1360,122.7L1440,128L1440,220L1360,220C1280,220,1120,220,960,220C800,220,640,220,480,220C320,220,160,220,80,220L0,220Z"></path>
+        </svg>
       </div>
 
-      <!-- ALERTS -->
+      <header class="app-topbar">
+        <div class="d-flex align-items-center gap-3">
+          <button class="btn btn-outline-secondary btn-sm d-lg-none" id="sidebarToggleBtn" type="button" aria-label="Toggle navigation menu">
+            <i class="bi bi-list fs-5"></i>
+          </button>
+          <div>
+            <h1 class="h5 fw-bold mb-0">Welcome back, <span id="headerUserName">User</span></h1>
+            <p class="text-muted small mb-0">Monitor your refrigerated shipments in real-time</p>
+          </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-2">
+          <div class="user-chip d-flex align-items-center gap-2 px-2 py-1 rounded-pill border" id="userProfileChip" role="button" tabindex="0" title="Click to view or edit profile">
+            <img id="headerUserPhoto" class="user-avatar-img d-none" alt="User profile photo">
+            <span class="user-avatar-circle" id="headerUserInitial">U</span>
+            <div class="text-start user-chip-text pe-1">
+              <span class="small fw-semibold d-block" id="navUserName"></span>
+              <span class="text-muted user-role-text d-block" id="userRoleBadge"></span>
+            </div>
+          </div>
+          <button class="btn btn-outline-secondary btn-sm icon-btn" id="btnTheme" title="Toggle Light/Dark Mode" type="button">
+            <i class="bi bi-moon-stars" id="themeIcon"></i>
+          </button>
+          <button class="btn btn-outline-danger btn-sm icon-btn" id="btnLogout" title="Sign Out" type="button">
+            <i class="bi bi-box-arrow-right"></i>
+          </button>
+        </div>
+      </header>
+
+      <main class="app-content">
+        <!-- DASHBOARD VIEW -->
+        <div id="viewDashboard">
+          <div id="managerNotificationsContainer"></div>
+
+          <!-- Interactive KPI Filter Cards -->
+          <section class="row g-3 mb-3" aria-label="Fleet KPIs">
+            <div class="col-6 col-xl-3">
+              <div class="card kpi-card kpi-total cursor-pointer kpi-active" id="kpiTotalCard" data-filter="ALL" role="button" tabindex="0" aria-pressed="true" title="Show all active shipments">
+                <div class="card-body d-flex align-items-center gap-3 py-3 px-3">
+                  <div class="kpi-icon kpi-icon-primary"><i class="bi bi-box-seam"></i></div>
+                  <div>
+                    <div class="kpi-label">Active Shipments</div>
+                    <div class="kpi-value text-primary" id="statTotal">0</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-xl-3">
+              <div class="card kpi-card kpi-normal cursor-pointer" id="kpiNormalCard" data-filter="Normal" role="button" tabindex="0" aria-pressed="false" title="Filter Normal range shipments">
+                <div class="card-body d-flex align-items-center gap-3 py-3 px-3">
+                  <div class="kpi-icon kpi-icon-success"><i class="bi bi-check-lg"></i></div>
+                  <div>
+                    <div class="kpi-label">Normal Range</div>
+                    <div class="kpi-value text-success" id="statNormal">0</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-xl-3">
+              <div class="card kpi-card kpi-warning cursor-pointer" id="kpiWarningCard" data-filter="Warning" role="button" tabindex="0" aria-pressed="false" title="Filter Warning alert shipments">
+                <div class="card-body d-flex align-items-center gap-3 py-3 px-3">
+                  <div class="kpi-icon kpi-icon-warning"><i class="bi bi-exclamation-triangle-fill"></i></div>
+                  <div>
+                    <div class="kpi-label">Warning Alerts</div>
+                    <div class="kpi-value text-warning" id="statWarning">0</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-xl-3">
+              <div class="card kpi-card kpi-critical cursor-pointer" id="kpiCriticalCard" data-filter="Critical" role="button" tabindex="0" aria-pressed="false" title="Filter Critical excursion shipments">
+                <div class="card-body d-flex align-items-center gap-3 py-3 px-3">
+                  <div class="kpi-icon kpi-icon-danger"><i class="bi bi-exclamation-circle-fill"></i></div>
+                  <div>
+                    <div class="kpi-label">Critical Excursions</div>
+                    <div class="kpi-value text-danger" id="statCritical">0</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Search, Filter & Actions Toolbar -->
+          <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-3">
+            <div class="d-flex flex-wrap gap-2 flex-grow-1 search-filter-group">
+              <div class="input-group input-group-sm flex-grow-1 search-input-wrap">
+                <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
+                <input type="text" id="searchInput" class="form-control" placeholder="Search by ID, Cargo, Route...">
+              </div>
+              <select id="statusFilter" class="form-select form-select-sm w-auto" aria-label="Filter shipments by condition">
+                <option value="ALL">All Condition</option>
+                <option value="Normal">Normal</option>
+                <option value="Warning">Warning</option>
+                <option value="Critical">Critical</option>
+              </select>
+              <button class="btn btn-sm btn-outline-secondary d-none" id="btnResetFilter" type="button">
+                <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
+              </button>
+            </div>
+
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-navy" id="btnSimulatePing" type="button">
+                <i class="bi bi-activity me-1"></i> Check Current Status
+              </button>
+              <button class="btn btn-sm btn-primary" id="btnOpenAddShipment" type="button">
+                <i class="bi bi-plus-lg me-1"></i> Register Shipment
+              </button>
+            </div>
+          </div>
+
+          <!-- Active Freight Table -->
+          <div class="card table-card mb-4">
+            <div class="card-header bg-white fw-semibold d-flex flex-wrap justify-content-between align-items-center gap-2 py-3 px-3">
+              <span><i class="bi bi-truck text-primary me-2"></i>Active Refrigerated Freight</span>
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-primary-subtle text-primary d-none" id="activeFilterLabel"></span>
+                <small class="text-muted d-inline-flex align-items-center gap-1">
+                  <span class="iot-dot"></span> IoT Monitored
+                </small>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th>Shipment ID</th>
+                    <th>Cargo</th>
+                    <th>Route</th>
+                    <th>Safe Limits</th>
+                    <th>Latest Temp</th>
+                    <th>Condition</th>
+                    <th class="text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="shipmentTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      <!-- ALERTS VIEW -->
       <div id="viewAlerts" class="d-none">
-        <div class="card border-0 shadow-sm mb-4">
-          <div class="card-header bg-white fw-bold d-flex flex-wrap gap-2 justify-content-between align-items-center">
-            <div class="d-flex align-items-center gap-2"><i class="bi bi-shield-exclamation text-danger fs-5"></i><span>Incident &amp; Spoilage Alerts</span><span class="badge bg-danger ms-1" id="unresolvedBadge">0 Active</span></div>
-            <button class="btn btn-sm btn-outline-danger" id="btnDeleteAllAlerts" type="button"><i class="bi bi-trash3 me-1"></i> Delete All Alerts</button>
+        <div class="card table-card mb-4">
+          <div class="card-header bg-white fw-semibold d-flex flex-wrap gap-2 justify-content-between align-items-center py-3 px-3">
+            <div class="d-flex align-items-center gap-2">
+              <i class="bi bi-shield-exclamation text-danger fs-5"></i>
+              <span>Incident &amp; Spoilage Alerts</span>
+              <span class="badge bg-danger ms-1" id="unresolvedBadge">0 Active</span>
+            </div>
+            <button class="btn btn-sm btn-outline-danger" id="btnDeleteAllAlerts" type="button">
+              <i class="bi bi-trash3 me-1"></i> Delete All Alerts
+            </button>
           </div>
           <div class="card-body p-3" id="alertsList"></div>
         </div>
       </div>
 
-      <!-- CANCELLATIONS -->
+      <!-- CANCELLATIONS VIEW -->
       <div id="viewCancellations" class="d-none">
-        <div class="card border-0 shadow-sm mb-4">
-          <div class="card-header bg-white fw-bold d-flex flex-wrap gap-2 justify-content-between align-items-center">
-            <div><i class="bi bi-x-octagon text-warning me-1"></i><span>Shipment Cancellation Requests Queue</span><small class="text-muted ms-2">(Review &amp; Approve/Reject)</small></div>
+        <div class="card table-card mb-4">
+          <div class="card-header bg-white fw-semibold d-flex flex-wrap gap-2 justify-content-between align-items-center py-3 px-3">
+            <div>
+              <i class="bi bi-x-octagon text-warning me-1"></i>
+              <span>Shipment Cancellation Requests Queue</span>
+              <small class="text-muted ms-2">(Review &amp; Approve/Reject)</small>
+            </div>
             <span class="badge bg-secondary" id="pendingCancelBadge">0 Pending</span>
           </div>
           <div class="card-body p-3" id="cancellationsList"></div>
         </div>
       </div>
 
-      <!-- DELIVERED -->
+      <!-- DELIVERED VIEW -->
       <div id="viewDelivered" class="d-none">
-        <div class="card border-0 shadow-sm mb-4">
-          <div class="card-header bg-white fw-bold d-flex flex-wrap gap-2 justify-content-between align-items-center">
+        <div class="card table-card mb-4">
+          <div class="card-header bg-white fw-semibold d-flex flex-wrap gap-2 justify-content-between align-items-center py-3 px-3">
             <span><i class="bi bi-box-seam text-success me-1"></i> Delivered Shipments History</span>
-            <button class="btn btn-sm btn-outline-danger" id="btnDeleteDelivered" type="button"><i class="bi bi-trash3 me-1"></i> Clear Delivered History</button>
+            <button class="btn btn-sm btn-outline-danger" id="btnDeleteDelivered" type="button">
+              <i class="bi bi-trash3 me-1"></i> Clear Delivered History
+            </button>
           </div>
-          <div class="table-responsive"><table class="table table-hover align-middle mb-0"><thead class="table-light"><tr><th>Shipment ID</th><th>Cargo</th><th>Route</th><th>Safe Limits</th><th>Final Reading</th><th>Delivered At</th><th class="text-end">Actions</th></tr></thead><tbody id="deliveredBody"></tbody></table></div>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>Shipment ID</th>
+                  <th>Cargo</th>
+                  <th>Route</th>
+                  <th>Safe Limits</th>
+                  <th>Final Reading</th>
+                  <th>Delivered At</th>
+                  <th class="text-end">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="deliveredBody"></tbody>
+            </table>
+          </div>
         </div>
       </div>
 
-      <!-- CANCELLED -->
+      <!-- CANCELLED VIEW -->
       <div id="viewCancelled" class="d-none">
-        <div class="card border-0 shadow-sm mb-4">
-          <div class="card-header bg-white fw-bold"><i class="bi bi-slash-circle text-danger me-1"></i> Cancelled Shipments Record</div>
-          <div class="table-responsive"><table class="table table-hover align-middle mb-0"><thead class="table-light"><tr><th>Shipment ID</th><th>Cargo</th><th>Route</th><th>Reason</th><th>Remarks</th><th>Requested By</th><th>Approved By</th><th>Cancelled At</th><th class="text-end">Actions</th></tr></thead><tbody id="cancelledBody"></tbody></table></div>
+        <div class="card table-card mb-4">
+          <div class="card-header bg-white fw-semibold d-flex flex-wrap justify-content-between align-items-center gap-2 py-3 px-3">
+            <span><i class="bi bi-slash-circle text-danger me-1"></i> Cancelled Shipments Record</span>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>Shipment ID</th>
+                  <th>Cargo</th>
+                  <th>Route</th>
+                  <th>Reason</th>
+                  <th>Remarks</th>
+                  <th>Requested By</th>
+                  <th>Approved By</th>
+                  <th>Cancelled At</th>
+                  <th class="text-end">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="cancelledBody"></tbody>
+            </table>
+          </div>
         </div>
       </div>
-    </main>
 
+      <!-- SPOILED VIEW -->
+      <div id="viewSpoiled" class="d-none">
+        <div class="card table-card mb-4">
+          <div class="card-header bg-white fw-semibold d-flex flex-wrap justify-content-between align-items-center gap-2 py-3 px-3">
+            <span><i class="bi bi-exclamation-octagon-fill text-danger me-1"></i> Spoiled Packages Record</span>
+            <button class="btn btn-sm btn-outline-danger" id="btnClearSpoiled" type="button">
+              <i class="bi bi-trash3 me-1"></i> Clear Spoiled Record
+            </button>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>Shipment ID</th>
+                  <th>Cargo</th>
+                  <th>Route</th>
+                  <th>Safe Limits</th>
+                  <th>Excursion Temp</th>
+                  <th>Declared By</th>
+                  <th>Spoilage Notes</th>
+                  <th>Spoiled At</th>
+                  <th class="text-end">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="spoiledBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- REPORTS VIEW -->
+      <div id="viewReports" class="d-none">
+        <div id="reportDeleteNoticeContainer"></div>
+        <!-- Logistics Manager Report Form -->
+        <div class="card table-card mb-3 d-none" id="managerReportFormCard">
+          <div class="card-header bg-white fw-semibold py-3 px-3">
+            <i class="bi bi-file-earmark-plus text-primary me-1"></i> Create &amp; Send Package Status Report
+          </div>
+          <div class="card-body p-3">
+            <form id="createReportForm" class="row g-2">
+              <div id="reportFormError" class="alert alert-danger py-1 small d-none"></div>
+              <div class="col-md-6">
+                <label for="reportShipmentSelect" class="form-label small fw-semibold">Select Package / Shipment</label>
+                <select id="reportShipmentSelect" class="form-select form-select-sm" required></select>
+              </div>
+              <div class="col-md-6">
+                <label for="reportPackageStatus" class="form-label small fw-semibold">Package Status</label>
+                <select id="reportPackageStatus" class="form-select form-select-sm" required>
+                  <option value="Normal - In Transit">Normal - In Transit</option>
+                  <option value="Warning - Temperature Drift">Warning - Temperature Drift</option>
+                  <option value="Critical - Excursion">Critical - Excursion</option>
+                  <option value="Delivered">Delivered</option>
+                  <option value="Spoiled">Spoiled</option>
+                  <option value="Cancelled">Cancelled</option>
+                </select>
+              </div>
+              <div class="col-12">
+                <label for="reportDetailsInput" class="form-label small fw-semibold">Status Details &amp; Summary for Warehouse</label>
+                <textarea id="reportDetailsInput" class="form-control form-control-sm" rows="2" placeholder="Describe package status, temperature behavior, or handling instructions..." required></textarea>
+              </div>
+              <div class="col-12 text-end">
+                <button type="submit" class="btn btn-sm btn-primary">
+                  <i class="bi bi-send me-1"></i> Send Report to Warehouse
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Reports & Q&A List -->
+        <div class="card table-card mb-4">
+          <div class="card-header bg-white fw-semibold d-flex flex-wrap justify-content-between align-items-center gap-2 py-3 px-3">
+            <span><i class="bi bi-file-earmark-text text-primary me-1"></i> Package Status Reports &amp; Warehouse Q&amp;A</span>
+            <span class="badge bg-primary-subtle text-primary" id="reportsCountBadge">0 Reports</span>
+          </div>
+          <div class="card-body p-3" id="reportsList"></div>
+        </div>
+      </div>
+      </main>
+    </div>
   </div>
 
   <!-- 3. MODALS -->
-  <!-- User Profile Modal -->
-  <div class="modal fade" id="userProfileModal" tabindex="-1" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content border-0 shadow-lg">
-    <div class="modal-header bg-navy text-white py-2"><h6 class="modal-title fw-bold"><i class="bi bi-person-badge me-2 text-cyan"></i>User Profile</h6><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
-    <div class="modal-body p-4">
-      <div class="d-flex align-items-center gap-3 mb-3 pb-3 border-bottom"><div class="profile-modal-avatar"><i class="bi bi-person-check-fill"></i></div><div><h5 class="mb-0 fw-bold" id="profModalName">User</h5><span class="badge bg-primary" id="profModalRole">Role</span><span class="badge bg-success-subtle text-success ms-1">Active</span></div></div>
-      <h6 class="fw-bold small text-secondary text-uppercase mb-2">Core Responsibilities</h6><p class="small text-muted p-2 bg-light rounded mb-3 fw-semibold" id="profModalDuty"></p>
-      <dl class="row small mb-0" id="profModalDetailsList"></dl>
+  <!-- User Profile Modal (View & Edit + Photo) -->
+  <div class="modal fade" id="userProfileModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg">
+        <div class="modal-header bg-navy text-white py-2">
+          <h6 class="modal-title fw-bold"><i class="bi bi-person-badge me-2 text-cyan"></i>User Profile</h6>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <div class="d-flex justify-content-between align-items-center gap-3 mb-3 pb-3 border-bottom">
+            <div class="d-flex align-items-center gap-3">
+              <div class="profile-modal-avatar">
+                <img id="profModalPhoto" class="profile-modal-img d-none" alt="Profile photo">
+                <i class="bi bi-person-check-fill" id="profModalFallbackIcon"></i>
+              </div>
+              <div>
+                <h5 class="mb-0 fw-bold" id="profModalName"></h5>
+                <span class="badge bg-primary" id="profModalRole"></span>
+                <span class="badge bg-success-subtle text-success ms-1">Active</span>
+              </div>
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-primary" id="btnToggleEditProfile">
+              <i class="bi bi-pencil-square me-1"></i> Edit
+            </button>
+          </div>
+
+          <div id="profileSaveMsg" class="alert alert-success py-2 small d-none"></div>
+
+          <!-- View Mode -->
+          <div id="profileViewMode">
+            <h6 class="fw-bold small text-secondary text-uppercase mb-2">Core Responsibilities</h6>
+            <p class="small text-muted p-2 bg-light rounded mb-3 fw-semibold" id="profModalDuty"></p>
+            <dl class="row small mb-0" id="profModalDetailsList"></dl>
+          </div>
+
+          <!-- Edit Mode -->
+          <form id="profileEditForm" class="d-none">
+            <div class="mb-3">
+              <label for="profilePhotoInput" class="form-label small fw-semibold">Profile Photo</label>
+              <div class="d-flex gap-2 align-items-center">
+                <input type="file" id="profilePhotoInput" class="form-control form-control-sm" accept="image/*">
+                <button type="button" class="btn btn-sm btn-outline-danger text-nowrap" id="btnRemoveProfilePhoto">Remove</button>
+              </div>
+              <small class="text-muted">PNG/JPG up to 1.5 MB</small>
+            </div>
+            <div class="row g-2">
+              <div class="col-12">
+                <label for="editProfName" class="form-label small fw-semibold">Display Name</label>
+                <input type="text" id="editProfName" class="form-control form-control-sm" required>
+              </div>
+              <div class="col-12">
+                <label for="editProfDuty" class="form-label small fw-semibold">Core Responsibilities</label>
+                <input type="text" id="editProfDuty" class="form-control form-control-sm" required>
+              </div>
+              <div class="col-6">
+                <label for="editProfEmail" class="form-label small fw-semibold">Email</label>
+                <input type="email" id="editProfEmail" class="form-control form-control-sm">
+              </div>
+              <div class="col-6">
+                <label for="editProfPhone" class="form-label small fw-semibold">Phone</label>
+                <input type="text" id="editProfPhone" class="form-control form-control-sm">
+              </div>
+              <div class="col-6">
+                <label for="editProfHub" class="form-label small fw-semibold">Station / Hub</label>
+                <input type="text" id="editProfHub" class="form-control form-control-sm">
+              </div>
+              <div class="col-6">
+                <label for="editProfShift" class="form-label small fw-semibold">Shift Hours</label>
+                <input type="text" id="editProfShift" class="form-control form-control-sm">
+              </div>
+            </div>
+            <div class="d-flex justify-content-end gap-2 mt-3">
+              <button type="button" class="btn btn-sm btn-secondary" id="btnCancelEditProfile">Cancel</button>
+              <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-check2 me-1"></i> Save Profile</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-  </div></div></div>
+  </div>
+
+  <!-- Declare Spoiled Modal -->
+  <div class="modal fade" id="spoiledModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header bg-danger text-white py-2">
+          <h6 class="modal-title fw-bold"><i class="bi bi-exclamation-octagon-fill me-2"></i>Declare Package Spoiled</h6>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="spoiledForm">
+          <div class="modal-body">
+            <input type="hidden" id="spoiledShipmentId">
+            <div class="p-2 bg-light rounded mb-3 small">
+              <div>Package: <strong id="spoiledShipmentLabel"></strong> (<span id="spoiledCargoLabel"></span>)</div>
+              <div>Critical Excursion Temp: <strong class="text-danger" id="spoiledTempLabel"></strong></div>
+            </div>
+            <div class="mb-2">
+              <label for="spoiledNotesInput" class="form-label small fw-semibold">Spoilage Inspection Notes</label>
+              <textarea id="spoiledNotesInput" class="form-control form-control-sm" rows="2" placeholder="Describe spoilage reason or condition..."></textarea>
+            </div>
+          </div>
+          <div class="modal-footer bg-light py-2">
+            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Back</button>
+            <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-exclamation-octagon me-1"></i> Confirm Spoiled</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Report Auth Modal -->
+  <div class="modal fade" id="deleteReportAuthModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header bg-danger text-white py-2">
+          <h6 class="modal-title fw-bold"><i class="bi bi-shield-lock me-2"></i>Verify Password to Request Report Deletion</h6>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="deleteReportAuthForm">
+          <div class="modal-body p-4">
+            <input type="hidden" id="deleteReportIdInput">
+            <p class="small text-muted mb-3">
+              Deleting report for <strong id="deleteReportTargetLabel" class="text-danger"></strong> requires your password and mutual consent from the other manager in Alerts.
+            </p>
+            <div id="deleteReportAuthError" class="alert alert-danger py-2 small d-none">
+              <i class="bi bi-exclamation-triangle-fill me-1"></i> Incorrect password.
+            </div>
+            <div class="mb-2">
+              <label for="deleteReportPassword" class="form-label small fw-semibold">Your Password</label>
+              <input type="password" id="deleteReportPassword" class="form-control form-control-sm" placeholder="Enter your password" required>
+            </div>
+          </div>
+          <div class="modal-footer bg-light py-2">
+            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-send me-1"></i> Send Delete Request</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
   <!-- Delete Auth Modal -->
-  <div class="modal fade" id="deleteAuthModal" tabindex="-1" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content border-0 shadow">
-    <div class="modal-header bg-danger text-white py-2"><h6 class="modal-title fw-bold"><i class="bi bi-shield-lock me-2"></i>Delete Authorization Required</h6><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
-    <form id="deleteAuthForm"><div class="modal-body p-4">
-      <p class="small text-muted mb-3">To permanently delete <strong id="deleteTargetShipmentId" class="text-danger">---</strong>, verify credentials.</p>
-      <div id="deleteAuthError" class="alert alert-danger py-2 small d-none"><i class="bi bi-exclamation-triangle-fill me-1"></i> Invalid credentials.</div>
-      <div class="mb-3"><label class="form-label small fw-semibold">User ID</label><input type="text" id="deleteAuthUserId" class="form-control form-control-sm" required></div>
-      <div class="mb-3"><label class="form-label small fw-semibold">Password</label><input type="password" id="deleteAuthPassword" class="form-control form-control-sm" required></div>
-    </div><div class="modal-footer bg-light py-2"><button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button><button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash3 me-1"></i> Delete</button></div></form>
-  </div></div></div>
+  <div class="modal fade" id="deleteAuthModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header bg-danger text-white py-2">
+          <h6 class="modal-title fw-bold"><i class="bi bi-shield-lock me-2"></i>Delete Authorization Required</h6>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="deleteAuthForm">
+          <div class="modal-body p-4">
+            <p class="small text-muted mb-3">
+              To permanently delete <strong id="deleteTargetShipmentId" class="text-danger"></strong>, verify credentials.
+            </p>
+            <div id="deleteAuthError" class="alert alert-danger py-2 small d-none">
+              <i class="bi bi-exclamation-triangle-fill me-1"></i> Invalid credentials.
+            </div>
+            <div class="mb-3">
+              <label for="deleteAuthUserId" class="form-label small fw-semibold">User ID</label>
+              <input type="text" id="deleteAuthUserId" class="form-control form-control-sm" required>
+            </div>
+            <div class="mb-3">
+              <label for="deleteAuthPassword" class="form-label small fw-semibold">Password</label>
+              <input type="password" id="deleteAuthPassword" class="form-control form-control-sm" required>
+            </div>
+          </div>
+          <div class="modal-footer bg-light py-2">
+            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash3 me-1"></i> Delete</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
   <!-- Register Shipment Modal -->
-  <div class="modal fade" id="addShipmentModal" tabindex="-1" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content border-0 shadow">
-    <div class="modal-header bg-navy text-white py-2"><h6 class="modal-title fw-bold"><i class="bi bi-plus-square me-2"></i>Register New Shipment</h6><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
-    <form id="addShipmentForm"><div class="modal-body row g-2">
-      <div id="addShipmentError" class="alert alert-danger py-1 small d-none"></div>
-      <div class="col-6"><label class="form-label small fw-semibold">Shipment ID</label><input type="text" id="newShipmentId" class="form-control form-control-sm" placeholder="SHP-109" required></div>
-      <div class="col-6"><label class="form-label small fw-semibold">Cargo Type</label><input type="text" id="newCargo" class="form-control form-control-sm" placeholder="Fresh Vaccines" required></div>
-      <div class="col-6"><label class="form-label small fw-semibold">Origin</label><input type="text" id="newOrigin" class="form-control form-control-sm" placeholder="Jaipur" required></div>
-      <div class="col-6"><label class="form-label small fw-semibold">Destination</label><input type="text" id="newDest" class="form-control form-control-sm" placeholder="Delhi" required></div>
-      <div class="col-4"><label class="form-label small fw-semibold">Min Temp (°C)</label><input type="number" step="0.1" id="newMinTemp" class="form-control form-control-sm" placeholder="2.0" required></div>
-      <div class="col-4"><label class="form-label small fw-semibold">Max Temp (°C)</label><input type="number" step="0.1" id="newMaxTemp" class="form-control form-control-sm" placeholder="8.0" required></div>
-      <div class="col-4"><label class="form-label small fw-semibold">Initial Temp (°C)</label><input type="number" step="0.1" id="newInitialTemp" class="form-control form-control-sm" placeholder="4.5" required></div>
-    </div><div class="modal-footer bg-light py-2"><button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button><button type="submit" class="btn btn-success btn-sm">Save Shipment</button></div></form>
-  </div></div></div>
+  <div class="modal fade" id="addShipmentModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header bg-navy text-white py-2">
+          <h6 class="modal-title fw-bold"><i class="bi bi-plus-square me-2"></i>Register New Shipment</h6>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="addShipmentForm">
+          <div class="modal-body row g-2">
+            <div id="addShipmentError" class="alert alert-danger py-1 small d-none"></div>
+            <div class="col-6">
+              <label for="newShipmentId" class="form-label small fw-semibold">Shipment ID</label>
+              <input type="text" id="newShipmentId" class="form-control form-control-sm" placeholder="Enter Shipment ID" required>
+            </div>
+            <div class="col-6">
+              <label for="newCargo" class="form-label small fw-semibold">Cargo Type</label>
+              <input type="text" id="newCargo" class="form-control form-control-sm" placeholder="Enter cargo type" required>
+            </div>
+            <div class="col-6">
+              <label for="newOrigin" class="form-label small fw-semibold">Origin</label>
+              <input type="text" id="newOrigin" class="form-control form-control-sm" placeholder="Origin city" required>
+            </div>
+            <div class="col-6">
+              <label for="newDest" class="form-label small fw-semibold">Destination</label>
+              <input type="text" id="newDest" class="form-control form-control-sm" placeholder="Destination city" required>
+            </div>
+            <div class="col-4">
+              <label for="newMinTemp" class="form-label small fw-semibold">Min Temp (°C)</label>
+              <input type="number" step="0.1" id="newMinTemp" class="form-control form-control-sm" placeholder="2.0" required>
+            </div>
+            <div class="col-4">
+              <label for="newMaxTemp" class="form-label small fw-semibold">Max Temp (°C)</label>
+              <input type="number" step="0.1" id="newMaxTemp" class="form-control form-control-sm" placeholder="8.0" required>
+            </div>
+            <div class="col-4">
+              <label for="newInitialTemp" class="form-label small fw-semibold">Initial Temp (°C)</label>
+              <input type="number" step="0.1" id="newInitialTemp" class="form-control form-control-sm" placeholder="4.5" required>
+            </div>
+          </div>
+          <div class="modal-footer bg-light py-2">
+            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-success btn-sm">Save Shipment</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
-  <!-- Resolve Modal -->
-  <div class="modal fade" id="resolveModal" tabindex="-1" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content border-0 shadow">
-    <div class="modal-header bg-navy text-white py-2"><h6 class="modal-title fw-bold"><i class="bi bi-thermometer-sun me-2"></i>Regulate Temperature</h6><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
-    <form id="resolveForm"><div class="modal-body">
-      <input type="hidden" id="resolveAlertId"><input type="hidden" id="resolveShipmentId">
-      <div class="p-2 bg-light rounded mb-3 small"><div>Shipment: <strong id="resShipmentRef">---</strong> (<span id="resCargo">---</span>)</div><div>Safe Range: <span class="badge bg-secondary" id="resSafeRange">---</span> | Excursion: <strong class="text-danger" id="resCurrentTemp">---</strong></div></div>
-      <div id="resolveWarningBox" class="alert alert-danger py-2 small d-none"><i class="bi bi-exclamation-triangle-fill me-1"></i> <span id="resolveWarningMsg">Must be in authorized range!</span></div>
-      <div class="mb-3"><label class="form-label small fw-semibold">Regulated Temperature (°C)</label><input type="number" step="0.1" id="regulatedTempInput" class="form-control" placeholder="Enter corrected reading within range" required></div>
-    </div><div class="modal-footer bg-light py-2"><button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button><button type="submit" class="btn btn-success btn-sm">Confirm &amp; Resolve Alert</button></div></form>
-  </div></div></div>
+  <!-- Resolve Temperature Modal -->
+  <div class="modal fade" id="resolveModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header bg-navy text-white py-2">
+          <h6 class="modal-title fw-bold"><i class="bi bi-thermometer-sun me-2"></i>Regulate Temperature</h6>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="resolveForm">
+          <div class="modal-body">
+            <input type="hidden" id="resolveAlertId">
+            <input type="hidden" id="resolveShipmentId">
+            <div class="p-2 bg-light rounded mb-3 small">
+              <div>Shipment: <strong id="resShipmentRef"></strong> (<span id="resCargo"></span>)</div>
+              <div>Safe Range: <span class="badge bg-secondary" id="resSafeRange"></span> | Excursion: <strong class="text-danger" id="resCurrentTemp"></strong></div>
+            </div>
+            <div id="resolveWarningBox" class="alert alert-danger py-2 small d-none">
+              <i class="bi bi-exclamation-triangle-fill me-1"></i>
+              <span id="resolveWarningMsg">Must be in authorized range!</span>
+            </div>
+            <div class="mb-3">
+              <label for="regulatedTempInput" class="form-label small fw-semibold">Regulated Temperature (°C)</label>
+              <input type="number" step="0.1" id="regulatedTempInput" class="form-control" placeholder="Enter corrected reading within range" required>
+            </div>
+          </div>
+          <div class="modal-footer bg-light py-2">
+            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-success btn-sm">Confirm &amp; Resolve Alert</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
   <!-- Cancel Request Modal -->
-  <div class="modal fade" id="cancelRequestModal" tabindex="-1" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content border-0 shadow">
-    <div class="modal-header bg-danger text-white py-2"><h6 class="modal-title fw-bold"><i class="bi bi-send-exclamation me-2"></i>Request Shipment Cancellation</h6><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
-    <form id="cancelRequestForm"><div class="modal-body">
-      <input type="hidden" id="cancelShipmentId">
-      <p class="small text-muted mb-3">Initiate cancellation for <strong id="cancelShipmentLabel">---</strong>. Request sent to Warehouse Operator for approval.</p>
-      <div class="mb-3">
-        <label class="form-label small fw-semibold">Reason for Cancellation</label>
-        <select id="cancelReasonSelect" class="form-select form-select-sm mb-2" required>
-          <option value="Severe Spoilage / Thermal Shock">Severe Spoilage / Thermal Shock</option>
-          <option value="Refrigeration Unit Mechanical Failure">Refrigeration Unit Mechanical Failure</option>
-          <option value="Route Diverted / Client Cancelled">Route Diverted / Client Cancelled</option>
-          <option value="Damaged Cargo Seals">Damaged Cargo Seals</option>
-          <option value="NONE">None of these (write my own reason)</option>
-        </select>
-        <div id="customReasonBox" class="d-none mb-2"><textarea id="customReasonInput" class="form-control form-control-sm" rows="2" placeholder="Type custom reason..."></textarea><div id="customReasonError" class="text-danger small d-none mt-1">Please write a reason.</div></div>
-        <label class="form-label small fw-semibold">Additional Remarks</label><textarea id="cancelReasonNotes" class="form-control form-control-sm" rows="2" placeholder="Optional notes..."></textarea>
+  <div class="modal fade" id="cancelRequestModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header bg-danger text-white py-2">
+          <h6 class="modal-title fw-bold"><i class="bi bi-send-exclamation me-2"></i>Request Shipment Cancellation</h6>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="cancelRequestForm">
+          <div class="modal-body">
+            <input type="hidden" id="cancelShipmentId">
+            <p class="small text-muted mb-3">
+              Initiate cancellation for <strong id="cancelShipmentLabel"></strong>. Request sent to Warehouse Operator for approval.
+            </p>
+            <div class="mb-3">
+              <label for="cancelReasonSelect" class="form-label small fw-semibold">Reason for Cancellation</label>
+              <select id="cancelReasonSelect" class="form-select form-select-sm mb-2" required>
+                <option value="Severe Spoilage / Thermal Shock">Severe Spoilage / Thermal Shock</option>
+                <option value="Refrigeration Unit Mechanical Failure">Refrigeration Unit Mechanical Failure</option>
+                <option value="Route Diverted / Client Cancelled">Route Diverted / Client Cancelled</option>
+                <option value="Damaged Cargo Seals">Damaged Cargo Seals</option>
+                <option value="NONE">None of these (write my own reason)</option>
+              </select>
+              <div id="customReasonBox" class="d-none mb-2">
+                <textarea id="customReasonInput" class="form-control form-control-sm" rows="2" placeholder="Type custom reason..."></textarea>
+                <div id="customReasonError" class="text-danger small d-none mt-1">Please write a reason.</div>
+              </div>
+              <label for="cancelReasonNotes" class="form-label small fw-semibold">Additional Remarks</label>
+              <textarea id="cancelReasonNotes" class="form-control form-control-sm" rows="2" placeholder="Optional notes..."></textarea>
+            </div>
+          </div>
+          <div class="modal-footer bg-light py-2">
+            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Back</button>
+            <button type="submit" class="btn btn-danger btn-sm" id="btnSubmitCancel">
+              <i class="bi bi-send me-1"></i> Send Request
+            </button>
+          </div>
+        </form>
       </div>
-    </div><div class="modal-footer bg-light py-2"><button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Back</button><button type="submit" class="btn btn-danger btn-sm" id="btnSubmitCancel"><i class="bi bi-send me-1"></i> Send Request</button></div></form>
-  </div></div></div>
+    </div>
+  </div>
 
   <!-- Telemetry History Modal -->
-  <div class="modal fade" id="detailsModal" tabindex="-1" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content border-0 shadow">
-    <div class="modal-header bg-navy text-white py-2"><h6 class="modal-title fw-bold" id="modalTitle">Shipment Telemetry</h6><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
-    <div class="modal-body">
-      <div class="d-flex justify-content-between p-2 bg-light rounded mb-3 small"><div><strong>Limits: </strong><span id="modalLimits"></span></div><div><strong>Latest Reading: </strong><span id="modalCurrent"></span></div></div>
-      <form id="addPingForm" class="input-group input-group-sm mb-3"><input type="number" step="0.1" id="manualTempInput" class="form-control" placeholder="Simulate Temp (°C)" required><button class="btn btn-primary" type="submit">Record IoT Ping</button></form>
-      <h6 class="fw-bold small mb-2">Telemetry History (Chronological)</h6><ul class="list-group list-group-flush small border rounded" id="modalHistoryList"></ul>
-    </div><div class="modal-footer bg-light py-2"><button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button></div>
-  </div></div></div>
+  <div class="modal fade" id="detailsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header bg-navy text-white py-2">
+          <h6 class="modal-title fw-bold" id="modalTitle">Shipment Telemetry</h6>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="d-flex justify-content-between p-2 bg-light rounded mb-3 small">
+            <div><strong>Limits: </strong><span id="modalLimits"></span></div>
+            <div><strong>Latest Reading: </strong><span id="modalCurrent"></span></div>
+          </div>
+          <form id="addPingForm" class="input-group input-group-sm mb-3">
+            <input type="number" step="0.1" id="manualTempInput" class="form-control" placeholder="Simulate Temp (°C)" required>
+            <button class="btn btn-primary" type="submit">Record IoT Ping</button>
+          </form>
+          <h6 class="fw-bold small mb-2">Telemetry History (Chronological)</h6>
+          <ul class="list-group list-group-flush small border rounded" id="modalHistoryList"></ul>
+        </div>
+        <div class="modal-footer bg-light py-2">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

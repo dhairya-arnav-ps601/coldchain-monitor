@@ -41,23 +41,30 @@ The system enforces strict operational compliance: whenever sensor readings devi
   * **Resolve:** Documented incident inspection notes entered before closing out the alert.
 * **Manager Authorization Guard:** Clearing historical alerts requires administrative authentication.
 
-### 3. 👥 Role-Based Access Control (RBAC)
-* Pre-configured personas with custom views, permissions, and profile inspection cards:
-  * **Logistics Manager (`Arnav`):** Fleet-wide operational oversight, route administration, cancellation approvals, and data export.
-  * **Warehouse Operator (`Sourabh`):** Terminal-level inspection, real-time alert acknowledgement, temperature telemetry logging, and incident notes.
+### 3. 👥 Role-Based Access Control (RBAC) & Editable Profiles
+* Pre-configured personas with custom views, permissions, and editable profile cards:
+  * **Logistics Manager (`Arnav`):** Fleet-wide operational oversight, route creation, cancellation requests, status report authoring, and deletion authorization.
+  * **Warehouse Operator (`Sourabh`):** Terminal-level inspection, delivery confirmation, cancellation approvals, report Q&A, and alert notifications.
+* **Editable Profiles & Photos:** Both users can update their display name, responsibilities, contact details, hub, shift hours, and upload or remove a profile photo synced to the cloud.
 
-### 4. 📦 Cancellation & Archive Workflows
-* **Cancellation Requests:** Structured cancellation pipeline requiring formal justification and manager sign-off.
-* **Historical Archives:** Dedicated views for **Delivered** and **Cancelled** shipments with complete audit histories.
+### 4. 📦 Spoiled, Cancellation & Archive Workflows
+* **Spoiled Packages Record:** Critical-condition shipments can be declared **Spoiled** with inspection notes, moving them out of active transit into a dedicated Spoiled archive and resolving open temperature alerts.
+* **Cancellation Requests:** Structured cancellation pipeline requiring formal justification and Warehouse Operator sign-off.
+* **Historical Archives:** Dedicated views for **Delivered**, **Cancelled**, and **Spoiled** shipments with full telemetry histories.
 
-### 5. 🔍 Data Filtering, Search & Analytics
-* **Real-Time KPIs:** Live count cards for Total Shipments, Normal, Warning, and Critical statuses.
-* **Instant Filter & Search:** Real-time query matching across Shipment ID, Cargo Type, Origin Hub, and Destination.
-* **Status Filtering:** Fast triage by operational state.
+### 5. 📝 Package Status Reports, Warehouse Q&A & Mutual-Consent Deletion
+* **Color-Coded Reports:** Logistics Manager files package status reports color-coded by state (`Normal - In Transit` / `Delivered` in blue, `Warning` in yellow, `Critical` in red, `Spoiled` in amber orange, `Cancelled` in muted grey).
+* **Two-Way Q&A:** Warehouse Operator can ask questions directly on any report, and the Logistics Manager replies inline with required details.
+* **Mutual-Consent Report Deletion:** Deleting a report requires password verification and sends a consent request to the **Alerts** tab for the other role (`Agree & Delete` vs. `Do Not Agree`). Without consent from both, the report is preserved and a refusal notice is delivered.
 
-### 6. 💾 Client-Side Persistence & Performance
-* **Zero Backend Required:** Fully standalone client app powered by `localStorage` persistence.
-* **Zero External Build Tooling:** Pure Vanilla ES6+ JavaScript, Semantic HTML5, and Bootstrap 5 CDN.
+### 6. 🔍 Interactive KPI Filtering & Stateful Alert Badges
+* **Interactive KPI Cards:** Clicking **Active Shipments**, **Normal Range**, **Warning Alerts**, or **Critical Excursions** dynamically filters the freight table and highlights the active card.
+* **Stateful Unread Badge:** The Alerts badge tracks unread alerts per role and clears to `0` once viewed, incrementing only when new alerts or consent requests arrive.
+
+### 7. ☁️ Real-Time Cloud Sync (Firebase Realtime Database)
+* **Zero `localStorage` for Shared Data:** 100% data-driven state (`shipments`, `alerts`, `cancellations`, `reports`, `profiles`) stored in **Firebase Realtime Database** (`coldchain-monitor-eb213`) so updates sync live across all connected browsers and devices.
+* **Zero Seed Data:** Starts completely empty (`0` records) and populates solely from user-registered shipments.
+* **Zero External Build Tooling:** Pure Vanilla ES6+ JavaScript, Semantic HTML5, CSS3 (with Light/Dark mode), Bootstrap 5 CDN, and Firebase Compat SDK.
 
 ---
 
@@ -149,12 +156,11 @@ http://localhost:8080
 * **HTML5:** Semantic tags (`<header>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<table>`, `<form>`), form validation attributes, modal view containers.
 * **CSS3:** Custom properties (`--navy`, `--cyan`, `--normal`, `--warning`, `--critical`), Flexbox, responsive grid integration, CSS keyframes, card badge styles.
 * **Bootstrap 5 (v5.3.3) & Bootstrap Icons (v1.11.3):** Responsive utility classes, modal controllers, alert styling, responsive navigation.
-* **Modern JavaScript (ES6+):**
-  * Array operations (`map`, `filter`, `find`, `reduce`, `some`, `forEach`)
+* **Modern JavaScript (ES6+) & Cloud Sync:**
+  * Array operations (`map`, `filter`, `find`, `some`, `forEach`)
   * Arrow functions, destructuring, object rest/spread
-  * Event delegation and DOM manipulation
-  * Browser `localStorage` CRUD lifecycle
-  * String escaping and defensive parsing
+  * DOM manipulation, form validation, and `FileReader` image uploads
+  * Firebase Realtime Database (`on("value")` live sync & `set()`) + `sessionStorage` tab auth
 
 ---
 
