@@ -3,8 +3,11 @@
  * Built with Vanilla ES6+ JavaScript, DOM APIs, and Firebase Realtime Database REST API.
  */
 
-// 1. Firebase Cloud Database Endpoint (Shared Real-Time Storage for All Users)
+// 1. Cloud Database Endpoints (Same-origin Vercel proxy first, direct Firebase REST fallback)
 const FIREBASE_DB_URL = "https://coldchain-monitor-eb213-default-rtdb.firebaseio.com/coldchain.json";
+const CLOUD_API_URL = (typeof location !== "undefined" && (location.protocol === "http:" || location.protocol === "https:") && !/^(localhost|127\.0\.0\.1)$/i.test(location.hostname))
+  ? "/api/cloud"
+  : FIREBASE_DB_URL;
 
 // 2. Authorized User Accounts & Default Profile Metadata
 const USERS = [
@@ -162,6 +165,33 @@ function applyCloudSnapshot(rawData) {
 let isSavingToCloud = false;
 let hasQueuedSave = false;
 let lastCloudSignature = "";
+let stateMutationSeq = 0;
+
+function normalizeSnapshotForCompare(rawData) {
+  const data = rawData && typeof rawData === "object" ? rawData : {};
+  const cloudProfiles = data.profiles && typeof data.profiles === "object" ? data.profiles : {};
+  const mergedProfiles = JSON.parse(JSON.stringify(DEFAULT_PROFILES));
+  Object.keys(cloudProfiles).forEach(key => {
+    mergedProfiles[key] = {
+      ...(mergedProfiles[key] || {}),
+      ...cloudProfiles[key],
+      details: {
+        ...((mergedProfiles[key] && mergedProfiles[key].details) || {}),
+        ...((cloudProfiles[key] && cloudProfiles[key].details) || {})
+      }
+    };
+  });
+
+  return {
+    shipments: normalizeArray(data.shipments).map(s => ({ ...s, readings: normalizeArray(s.readings) })),
+    alerts: normalizeArray(data.alerts),
+    cancellations: normalizeArray(data.cancellations),
+    managerNotifications: normalizeArray(data.managerNotifications),
+    reports: normalizeArray(data.reports).map(r => ({ ...r, questions: normalizeArray(r.questions) })),
+    reportNotices: normalizeArray(data.reportNotices),
+    profiles: mergedProfiles
+  };
+}
 
 function buildCloudPayload() {
   return {
@@ -175,8 +205,24 @@ function buildCloudPayload() {
   };
 }
 
+function cloudFetch(options) {
+  return fetch(CLOUD_API_URL, options).then(res => {
+    if (!res.ok && CLOUD_API_URL !== FIREBASE_DB_URL) {
+      return fetch(FIREBASE_DB_URL, options);
+    }
+    return res;
+  }).catch(err => {
+    if (CLOUD_API_URL !== FIREBASE_DB_URL) {
+      return fetch(FIREBASE_DB_URL, options);
+    }
+    throw err;
+  });
+}
+
 function saveState() {
   if (typeof fetch !== "function") return;
+  stateMutationSeq++;
+
   if (isSavingToCloud) {
     hasQueuedSave = true;
     return;
@@ -187,15 +233,16 @@ function saveState() {
 
   const payload = buildCloudPayload();
   const payloadJson = JSON.stringify(payload);
+  lastCloudSignature = JSON.stringify(normalizeSnapshotForCompare(payload));
 
-  fetch(FIREBASE_DB_URL, {
+  cloudFetch({
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: payloadJson
+    body: payloadJson,
+    keepalive: payloadJson.length < 60000
   })
     .then(res => {
       if (!res.ok) throw new Error("HTTP " + res.status);
-      lastCloudSignature = payloadJson;
       updateCloudStatus("System Online", "Cloud Synced " + getCurrentTime(), false);
     })
     .catch(err => {
@@ -1899,18 +1946,22 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  // Load shared state from Firebase REST API and poll every 4s for live multi-user sync
+  // Load shared state from cloud and poll every 4s for live multi-user sync
   function syncFromCloud() {
-    if (typeof fetch !== "function" || isSavingToCloud) return Promise.resolve();
+    if (typeof fetch !== "function" || isSavingToCloud || hasQueuedSave) return Promise.resolve();
+    const seqAtStart = stateMutationSeq;
 
-    return fetch(FIREBASE_DB_URL, { cache: "no-store" })
+    return cloudFetch({ cache: "no-store" })
       .then(res => {
         if (!res.ok) throw new Error("HTTP " + res.status);
         return res.json();
       })
       .then(data => {
-        if (isSavingToCloud) return;
-        const incomingSignature = JSON.stringify(data || {});
+        // Ignore stale GET responses if user made changes while this GET was in flight
+        if (isSavingToCloud || hasQueuedSave || stateMutationSeq !== seqAtStart) return;
+
+        const normalized = normalizeSnapshotForCompare(data);
+        const incomingSignature = JSON.stringify(normalized);
         const firstLoad = !cloudReady;
         cloudReady = true;
 
